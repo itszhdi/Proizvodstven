@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketSpace</title>
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">TicketSpace</div>
+            <div class="search-bar">
+                <input type="text" placeholder="Поиск">
+                <button>Поиск</button>
+            </div>
+            <div class="city-select">
+                <button>Город ▼</button>
+            </div>
+            <div class="user-icon">👤</div>
+        </div>
+    </header>
+
+    <main>
+        <section class="events">
+            <h1>Афиша событий</h1>
+            <div class="events-banner">
+                <img src="your-banner-image.jpg" alt="Афиша">
+            </div>
+        </section>
+
+        <section class="current-events">
+            <h2>Актуальное</h2>
+            <div class="events-list">
+                <div class="event-item">
+                    <img src="club-fair.jpg" alt="Club Fair">
+                </div>
+                <div class="event-item">
+                    <img src="acoustic-night.jpg" alt="Acoustic Night">
+                </div>
+                <div class="event-item">
+                    <img src="vinyl-party.jpg" alt="Акүйстикалық кеш">
+                </div>
+            </div>
+        </section>
+
+        <section class="aitu-map">
+            <h2>Карта AITU</h2>
+            <p>Так вам будет легче найти мероприятие!</p>
+            <button>Открыть</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="contact-info">
+                <p>Помощь без выходных:</p>
+                <p>+7 702 135 6036 — Диана</p>
+                <p>+7 700 391 9868 — Айым</p>
+                <p>help.ticketspace@gmail.com</p>
+            </div>
+            <div class="links">
+                <a href="#">О нас</a>
+                <a href="#">Сотрудничество</a>
+                <a href="#">Способы оплаты</a>
+                <a href="#">Программа лояльности</a>
+            </div>
+            <div class="partners">
+                <img src="astana-hub-logo.png" alt="Astana Hub">
+                <img src="freedom-ticket-logo.png" alt="Freedom Ticket">
+                <img src="kz-logo.png" alt="КЗ">
+            </div>
+        </div>
+        <p class="copyright">© 2007–2024 ТОО «TicketSpace». Все права защищены.</p>
+    </footer>
+</body>
+</html>

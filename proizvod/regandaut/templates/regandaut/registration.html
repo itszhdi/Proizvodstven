@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="{% static 'regandaut/css/register.css' %}">
+</head>
+<body class="register-page">
+  <div class="container">
+    <a href="/" class="back-arrow">←</a>
+    <h2>Регистрация</h2>
+    <form method="post" action="/register/">
+      {% csrf_token %} <!-- Обязательно добавляем защиту от CSRF -->
+      <input type="email" id="email" name="email" placeholder="Введите почту" required>
+      <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+      <input type="password" id="confirm_password" name="confirm_password" placeholder="Повторите пароль" required>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+                    </div>
+        {% endif %}
+      <a href="{% url 'authorize' %}" class="switch-link">Есть аккаунт?</a>
+      <button type="submit">Войти</button>
+    </form>
+  </div>
+</body>
+</html>
