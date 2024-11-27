@@ -37,6 +37,7 @@ try:
                 time VARCHAR(50) NOT NULL,
                 address VARCHAR(100) NOT NULL
             );
+            
 
             CREATE TABLE IF NOT EXISTS Tickets (
                 ticket_id SERIAL PRIMARY KEY,
