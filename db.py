@@ -38,13 +38,14 @@ try:
                 address VARCHAR(100) NOT NULL
             );
             
-
             CREATE TABLE IF NOT EXISTS Tickets (
                 ticket_id SERIAL PRIMARY KEY,
                 event_id INT NOT NULL REFERENCES Events(event_id),
                 user_id INT NOT NULL REFERENCES Customers(user_id),
                 price INT NOT NULL
             );
+            
+            
             
             INSERT INTO Categories(category)
             VALUES ('ЧТО ГДЕ КОГДА'),
