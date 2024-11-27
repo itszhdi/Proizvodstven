@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'regandaut',
     'main',
     'eventpage',
+    'figuration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
