@@ -1,10 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if event %}
+    <title>{{ event.name }}</title>
+    <link rel="stylesheet" href="{% static 'eventpage/css/style.css' %}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
 </head>
 <body>
-
+    <div class="container">
+        <div class="content">
+            <div class="event-image">
+                <img src="/static/eventpage/img/image.png" alt="Event poster">
+            </div>
+            <div class="event-details">
+                <h2>{{ event.name }}</h2>
+                <p class="description-p"><strong>Описание</strong></p>
+                <p class="description">
+                    {{ event.description }}
+                </p>
+                <div class="info">
+                    <p><strong>Место: </strong> {{ event.place }} </p>
+                    <p><strong>Тип мероприятия: </strong> {{ event.category }} </p>
+                    <p><strong>Дата: </strong>{{ event.date }}</p>
+                    <p><strong>Время: </strong>{{ event.time }}</p>
+                    <p><strong>Организатор: </strong>{{ event.organizer }}</p>
+                    {% endif %}
+                </div>
+                <button class="buy-ticket">Купить билет</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
