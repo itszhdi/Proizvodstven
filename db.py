@@ -67,7 +67,7 @@ try:
                     ('AITU Commencement Party', '11-08-2024', 'We are thrilled to invite you to AITU Commencement Party! It`s time to officially join our family and meet new friendse.', 4, 4, 'Astana', '16:00', 'West Hall','4ACP.png'),
                     ('Club fair', '18-09-2024', 'AITU has a huge number of clubs. We know that freshmen can`t wait to learn more about each one and already start taking part in student life', 3, 3, 'Astana', '14:00', 'Assembly Hall','5CF.png'),
                     ('Отчетный концерт "Eurasia Band"', '22-11-2024', 'We invite Friends from AITU to attend the Eurasia Band reporting concert. Unforgettable impressions and a warm welcome await you!', 2,2, 'Astana', '17:00', 'Kazhymukan 11, edu&lab','6CEB.png'),
-                    ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire. Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png'),
+                    ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire". Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png'),
                     ('Music Spooktacular', '31-10-2024', 'Through the fog of an October night, when the world of the living and the dead almost touch, we invite you to the “Music Spooktacular”', 2,2, 'Astana', '17:00', 'Assembly Hall','8MS.png');
                     
             

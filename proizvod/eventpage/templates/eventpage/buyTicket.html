@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Purchase</title>
+    <link rel="stylesheet" href="{% static 'eventpage/css/buy.css' %}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {% if event %}
+            <div class="logo">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png" alt="TicketSpace Logo">
+                <span>TicketSpace</span>
+            </div>
+            <h2>{{ event.event }}</h2>
+            <p>{{ event.place }}</p>
+        </div>
+        <div class="content">
+            <div class="left">
+                <div class="image-frame">
+                    <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
+                </div>
+            </div>
+            <div class="right">
+                <div class="time-left">
+                    <p>До конца продаж</p>
+                    <div class="timer">0 дней 12:45:10</div>
+                </div>
+                <div class="details">
+                    <p><strong>Цена:</strong>{{ event.price }}</p>
+                    <p><strong>Дата:</strong>{{ event.date }}</p>
+                    <p><strong>Время:</strong>{{ event.time }}</p>
+                    {% endif %}
+                </div>
+                <button class="buy-ticket">Купить билет</button>
+                <p class="note">Отправим билет вам на почту!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
