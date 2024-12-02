@@ -10,6 +10,36 @@
     <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
 </head>
 <body>
+  <header>
+              <a href="/" class="back-arrow">
+      <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
+            <div class="search-box">
+                <div class="logo">
+                  <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
+                </div>
+                <div class="search-bar">
+                  <input type="text" placeholder="Поиск">
+                  <button>
+                    <img src="/static/eventpage/img/поиск лого.PNG" alt="Search">
+                  </button>
+                </div>
+                <div class="city-select">
+                    <img src="/static/eventpage/img/СУКА.PNG" alt="Город" class="icon">
+                    <span class="city-text">ГОРОД</span>
+                    <ul class="dropdown">
+                        <li>Астана</li>
+                        <li>Алматы</li>
+                        <li>Шымкент</li>
+                        <li>Караганда</li>
+                    </ul>
+                </div>
+
+                <div class="profile">
+                  <img src="/static/eventpage/img/profile.PNG" alt="Profile">
+                </div>
+              </div>
+    </header>
     <div class="container">
         <div class="content">
             <div class="event-image">
@@ -27,11 +57,147 @@
                     <p><strong>Дата: </strong>{{ event.date }}</p>
                     <p><strong>Время: </strong>{{ event.time }}</p>
                     <p><strong>Организатор: </strong>{{ event.organizer }}</p>
-                    {% endif %}
                 </div>
-                <button class="buy-ticket">Купить билет</button>
+                <button class="buy-ticket" id="open-modal">Купить билет</button>
             </div>
         </div>
     </div>
+
+
+    <!-- Модальное окно -->
+    <div id="wind" class="modal">
+        <div class="modal-window">
+            <div class="search-box">
+                <div class="logo">
+                  <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
+                </div>
+                <div class="search-bar">
+                    <p class="name"> {{ event.name }} </p>
+                    <p class="place"> {{ event.place }} </p>
+                </div>
+              </div>
+            <div class="content">
+                <div class="left">
+                    <div class="image-frame">
+                        <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="time-left">
+                        <p>До конца продаж: </p>
+                        <div class="timer">{{ event.timer }}</div>
+                    </div>
+                    <div class="details">
+                        <p><strong>Цена:</strong> {{ event.price }}</p>
+                        <p><strong>Дата:</strong> {{ event.date }}</p>
+                        <p><strong>Время:</strong> {{ event.time }}</p>
+                        {% endif %}
+                    </div>
+                    <button class="buy-ticket" id="open-second-modal">Купить билет</button>
+                    <button class="close-window" id="close-modal">X</button>
+                </div>
+            </div>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+        <!-- Второе модальное окно -->
+     <div id="second-modal" class="modal">
+         <div class="modal-window">
+              <div class="search-box">
+                <div class="logo">
+                  <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
+                </div>
+                <div class="search-bar">
+                    <p class="name"> {{ event.name }} </p>
+                    <p class="place"> {{ event.place }} </p>
+                </div>
+              </div>
+        <div class="content">
+            <div class="form-section">
+                <h2>Оформление заказа</h2>
+                <p class="selection">Карта:</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="card-number">Номер карты:</label>
+                    <input type="text" id="card-number" name="card" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+                    <div class="row">
+                        <div class="column">
+                    <label for="expiry-date">Срок действия:</label>
+                    <input type="text" id="expiry-date" name="date" placeholder="MM/YY" required>
+                        </div>
+                        <div class="column">
+                    <label for="cvv">CVV:</label>
+                    <input type="password" id="cvv" name="cvv" placeholder="***" required>
+                        </div>
+                    </div>
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="message {{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                                </div>
+                    {% endif %}
+                    <button type="submit" class="buy-ticket">Оформить</button>
+                </form>
+                <p>Отправим билет вам на почту!</p>
+                <button class="close-window" id="close-second-modal">X</button>
+            </div>
+            <div class="details-section">
+                <div class="timer-section">
+                    <p>До конца продаж: </p>
+                    <div class="timer">{{ event.timer }}</div>
+                </div>
+                <div class="payment-options">
+                    <p>В приложении:</p>
+                    <div class="logos">
+                        <a href="https://kaspi.kz/" target="_blank">
+                        <img src="/static/eventpage/img/kaspi.png" alt="Kaspi.kz">
+                    </a>
+                    <a href="https://qiwi.com/" target="_blank">
+                        <img src="/static/eventpage/img/qiwi.png" alt="QIWI">
+                    </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+         <div class="overlay" id="second-overlay"></div>
+    </div>
+
+    <script>
+       // Получение элементов
+        const modal = document.getElementById('wind');
+        const secondModal = document.getElementById('second-modal');
+        const openModalButton = document.getElementById('open-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const overlay = document.getElementById('overlay');
+
+        const openSecondModalButton = document.getElementById('open-second-modal');
+        const closeSecondModalButton = document.getElementById('close-second-modal');
+        const secondOverlay = document.getElementById('second-overlay');
+
+        // Функции для первого модального окна
+        const openModal = () => modal.classList.add('show');
+        const closeModal = () => modal.classList.remove('show');
+
+        // Функции для второго модального окна
+        const openSecondModal = () => {
+            modal.classList.remove('show'); // Закрываем первое окно
+            secondModal.classList.add('show'); // Открываем второе окно
+        };
+        const closeSecondModal = () => secondModal.classList.remove('show');
+
+        // События для первого окна
+        openModalButton.addEventListener('click', openModal);
+        closeModalButton.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+
+        // События для второго окна
+        openSecondModalButton.addEventListener('click', openSecondModal);
+        closeSecondModalButton.addEventListener('click', closeSecondModal);
+        secondOverlay.addEventListener('click', closeSecondModal);
+    </script>
+
 </body>
 </html>

@@ -10,7 +10,9 @@
 </head>
 <body class="register-page">
   <div class="container">
-    <a href="/" class="back-arrow">←</a>
+        <a href="/" class="back-arrow">
+      <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
     <h2>Авторизация</h2>
     <form method="post" action="/authorize/">
       {% csrf_token %} <!-- Обязательно добавляем защиту от CSRF -->

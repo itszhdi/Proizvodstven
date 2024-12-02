@@ -106,17 +106,13 @@ button {
 
   .back-arrow {
     position: absolute;
-    top: 20px;
+    top: 25px;
     left: 20px;
-    text-decoration: none;
-    color: white;
-    font-size: 1.5rem;
   }
 
   .back-arrow:hover {
     opacity: 0.8;
   }
-
   .messages{
   font-family: Arial;
   font-size: 0.9rem;

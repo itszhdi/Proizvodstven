@@ -1,48 +1,92 @@
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.db import connection
-def open_event_page(request):
-    with connection.cursor() as cursor:
-        cursor.execute("""SELECT
-        event_name, event_date, description, category, name, time, address, photo_path
-        FROM Events
-        JOIN Categories USING (category_id)
-        JOIN Organizers USING (organizer_id)
-        WHERE event_id = %s;""", [2])
-        row = cursor.fetchone()
+import re
+from django.urls import reverse
 
-        if row:
-            event_data = {
-                'name': row[0],
-                'date': row[1],
-                'description': row[2],
-                'category': row[3],
-                'organizer': row[4],
-                'time': row[5],
-                'place': row[6],
-                'image': row[7]
-            }
+def get_event_data(event_id):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    event_name, 
+                    event_date, 
+                    description, 
+                    category, 
+                    name AS organizer_name, 
+                    time, 
+                    address, 
+                    photo_path, 
+                    price,
+                    timer(event_id) AS timer
+                FROM Events
+                JOIN Categories USING (category_id)
+                JOIN Organizers USING (organizer_id)
+                JOIN Tickets USING (event_id)
+                WHERE event_id = %s;
+            """, [event_id])
+            row = cursor.fetchone()
+            if row:
+                event_data = {
+                    'name': row[0],
+                    'date': row[1],
+                    'description': row[2],
+                    'category': row[3],
+                    'organizer': row[4],
+                    'time': row[5],
+                    'place': row[6],
+                    'image': row[7],
+                    'price': row[8],
+                    'timer': row[9]
+                }
+
+                if row[9] == '0':
+                    event_data['timer'] = 'SOLD OUT!'
+
+                return event_data
+            else:
+                return None
+    except Exception as e:
+        print(f"Ошибка при получении данных: {e}")
+        return None
+
+def enter_card_data(request, event_id):
+    if request.method == "POST":
+        card_number = request.POST.get('card')
+        date = request.POST.get('date')
+        cvv = request.POST.get('cvv')
+
+        card_number_regex = r'^\d{16}$'
+        if not re.match(card_number_regex, card_number):
+            messages.error(request, "Номер карты должен содержать 16 цифр.")
+            return False
+
+        date_regex = r'^\d{2}/\d{2}$'
+        if not re.match(date_regex, date):
+            messages.error(request, "Введите корректную дату в формате MM/YY.")
+            return False
+
+        cvv_regex = r'^\d{3}$'
+        if not re.match(cvv_regex, cvv):
+            messages.error(request, "CVV код должен содержать 3 цифры.")
+            return False
+    return True
+
+def open_event_page(request, event_id):
+    event_data = get_event_data(event_id)
+
+    if request.method == "POST":
+        if not enter_card_data(request, event_id):
+            return redirect(reverse('event', args=[event_id]))
         else:
-            event_data = None
+            return redirect('buy')
+
+    if event_data is None:
+        return render(request, 'main/index.html')
 
     return render(request, 'eventpage/event.html', {'event': event_data})
 
-def buy_ticket(request):
-    with connection.cursor() as cursor:
-        cursor.execute("""SELECT
-        event_name, event_date, time, address, price
-        FROM Events
-        JOIN Tickets USING (event_id)
-        WHERE event_id = %s;""", [2])
-        row = cursor.fetchone()
 
-        if row:
-            info = {
-                'event': row[0],
-                'date': row[1],
-                'time': row[2],
-                'place': row[3],
-                'price': row[4]
-            }
-        else:
-            info = None
-    return render(request, 'eventpage/buyTicket.html', {'event': info})
+def buy_ticket(request,event_id):
+    event_data = get_event_data(event_id)
+    return render(request, 'eventpage/buyTicket.html', {'event': event_data})

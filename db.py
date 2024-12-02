@@ -80,6 +80,32 @@ try:
                   (6, 1000),
                   (7, 1000),
                   (8, 1500);
+                  
+                  
+            CREATE OR REPLACE FUNCTION timer(event int) 
+            RETURNS TEXT AS $$
+            DECLARE
+                base_date TIMESTAMP := '2024-08-31 14:14:35';
+                events_date TIMESTAMP;
+                time_diff INTERVAL;
+            BEGIN
+                SELECT event_date 
+                INTO events_date
+                FROM Events
+                WHERE event_id = event;
+                
+                IF events_date IS NULL THEN
+                    RAISE EXCEPTION 'No event_date found in Events table';
+                END IF;
+                
+                time_diff := events_date - base_date;
+                RETURN 
+                    CONCAT(
+                        EXTRACT(DAY FROM time_diff), ' дней ',
+                        EXTRACT(HOUR FROM time_diff), ' часов ',
+                    );
+            END;
+            $$ LANGUAGE plpgsql;
         
             """)
             print("ok")

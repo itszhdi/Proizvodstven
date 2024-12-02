@@ -10,10 +10,12 @@
 </head>
 <body class="register-page">
   <div class="container">
-    <a href="/" class="back-arrow">←</a>
+    <a href="/" class="back-arrow">
+      <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
     <h2>Регистрация</h2>
     <form method="post" action="/register/">
-      {% csrf_token %} <!-- Обязательно добавляем защиту от CSRF -->
+      {% csrf_token %}
       <input type="email" id="email" name="email" placeholder="Введите почту" required>
       <input type="password" id="password" name="password" placeholder="Введите пароль" required>
       <input type="password" id="confirm_password" name="confirm_password" placeholder="Повторите пароль" required>
