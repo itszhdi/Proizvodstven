@@ -19,8 +19,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'mainpage',
     'regandaut',
-    'main',
     'eventpage',
     'figuration',
     'django.contrib.admin',

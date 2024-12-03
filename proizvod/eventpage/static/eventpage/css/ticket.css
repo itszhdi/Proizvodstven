@@ -39,48 +39,76 @@ body::before {
   z-index: -1;
   opacity: 1;
 }
-.ticket {
-    width: 300px;
-    height: 200px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    overflow: hidden;
-}
 
-.ticket-front {
+.ticket-right {
     width: 43%;
-    height: 50%;
+    height: 60%;
     padding: 20px;
     position: absolute;
-    top: 27%;
-    left: 20%;
+    top: 22%;
+    left: 16%;
     text-align: center;
-    background-color: #fff;
-    color: #333;
+    background-color: #868DD4;
+    color: white;
+    border-radius: 30px;
 }
 
-.ticket-logo, .ticket-university {
-    margin-bottom: 10px;
+.ticket-left{
+    width: 23%;
+    height: 60%;
+    padding: 20px;
+    position: absolute;
+    top: 22%;
+    left: 59%;
+    text-align: center;
+    background-color: #868DD4;
+    color: white;
+    border-radius: 30px;
 }
 
-.ticket-info p {
-    margin: 5px 0;
+.ticket-university {
+    width: 196px;
+    height: auto;
+    position: absolute;
+    top: 5%;
+    left: 53%;
+}
+
+.ticket-info {
+    position: absolute;
+    left: 55%;
+    top: 22%;
+    text-align: left;
+
+}
+p{
+ margin: 12% 0;
+ font-size: 28px;
+ font-family: 'Candara';
 }
 
 .ticket-image {
-    width: 100%;
-    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 1%;
+}
+
+.ticket-logo {
+    width: 235px;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 1%;
 }
 
 .ticket-qr-code {
     width: 100%;
-    height: 100px;
+    height: 90px;
 }
 
-.ticket-details p {
-    margin: 5px 0;
+.ticket-details {
+    position: absolute;
+    left: 31%;
+    top: 60%;
+    text-align: center;
 }

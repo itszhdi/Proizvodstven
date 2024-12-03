@@ -8,12 +8,12 @@
 /* Подключение шрифтов */
 @font-face {
   font-family: 'Hagrid';
-  src: url('./шрифт/Hagrid-Regular-trial.ttf') format('truetype');
+  src: url('/static/regandaut/font/Hagrid-Regular-trial.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Candara';
-  src: url('./шрифт/Candarai.ttf') format('truetype');
+  src: url('/static/regandaut/font/Candara.ttf') format('truetype');
 }
 
 /* Общие стили */
@@ -43,7 +43,7 @@ body::before {
 /* Хедер */
 header {
   width: 100%;
-  padding: 15px 10px;
+  padding: 10px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,9 +57,9 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(134, 141, 212, 0.9); /* Light purple */
+    background-color: rgba(134, 141, 212); /* Light purple */
     border-radius: 20px; /* Rounded corners */
-    padding: 10px 10px;
+    padding: 0 10px;
     margin: 15px auto; /* Center it horizontally */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
   }
@@ -74,26 +74,31 @@ header {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1450px;
+  max-width: 1400px;
 }
 
-.search-bar {
+.search-bar form {
     display: flex;
     align-items: center;
     border: 1px solid white;
     flex-grow: 1;
     margin: 0 10px; /* Spacing around the search bar */
-    background-color: rgba(134, 141, 212, 0.9);
+    background-color: rgba(134, 141, 212);
     border-radius: 20px;
     padding: 5px 10px;
+    width: 900px;
+    position: absolute;
+    top: 34%;
+    left: 22%;
   }
 
   .search-bar input {
     border: none;
     outline: none;
+    color: white;
     flex-grow: 10; /* Make input take up available space */
     padding: 10px;
-    background-color: rgba(134, 141, 212, 0.9);
+    background-color: rgba(134, 141, 212);
     border-radius: 15px;
     font-size: 24px;
     font-family: 'Candara';
@@ -115,6 +120,7 @@ header {
         position: relative;
         display: inline-block;
         color: rgba(255, 255, 255);
+        margin-left: 66%;
         text-align: center;
     }
     .city-text {
@@ -188,12 +194,12 @@ header {
   width: 38px;
   height: auto;
   cursor: pointer;
-  margin: 0 25px 0 0 ;
+  margin: 0 28px 0 0 ;
 }
 
 /* Основной контейнер */
 .container {
-  max-width: 1400px;
+  max-width: 1550px;
   width: 100%;
   padding: 40px;
   margin-top: 100px; /* Отступ для учета фиксированного хедера */
@@ -417,6 +423,12 @@ header {
  margin-top: 12%;
 }
 
+#wind .buy-ticket.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
 #wind .search-box {
     display: flex;
     align-items: center;
@@ -424,7 +436,6 @@ header {
     background-color: rgba(134, 141, 212, 0.9); /* Light purple */
     border-radius: 20px; /* Rounded corners */
     width: 90%; /* Adjust width as needed */
-    margin: 10px auto; /* Center it horizontally */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
   }
 
@@ -434,25 +445,29 @@ header {
   }
 
 #wind .search-bar {
+    display: flex; /* Flexbox для размещения элементов */
+    align-items: left; /* Центрирование элементов по вертикали */
+    flex-grow: 1;
+    margin: 0 20px; /* Отступы вокруг строки поиска */
+    background-color: none;
+    border-radius: 20px;
+    padding: 5px 10px; /* Внутренние отступы */
     border: none;
-    background: none;
-    text-align: left; /* Выравнивание текста по левому краю */
-    display: flex;
-    flex-direction: column; /* Вертикальное расположение текста */
-    align-items: flex-start; /* Выравниваем элементы по левому краю */
-    gap: 5px; /* Расстояние между строками */
-    padding-left: 20px; /* Отступ слева для текстового блока */
-  }
+    box-shadow: none;
+    position: relative;
+    flex-direction: column;
+}
+
 
  .name {
-  font-size: 32px; /* Размер текста для названия */
-  font-weight: bold; /* Жирный шрифт */
-  color: white; /* Цвет текста */
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
 }
 
 .place {
-  font-size: 20px; /* Размер текста для места */
-  color: rgba(255, 255, 255, 0.7); /* Светлый цвет для места */
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 
@@ -461,12 +476,24 @@ header {
     padding: 20px;
 }
 
+#second-modal .modal .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+
 #second-modal .search-box {
-  width: 85%;
-  height: 118px;
+  width: 88%;
+  height: 100px;
   position: absolute;
   top: 3%;
-  left: 7.5%;
+  left: 6.5%;
   background-color: rgba(134, 141, 212, 0.9);
   border-radius: 20px;
   padding: 15px 10px; /* Отступы внутри блока */
@@ -475,23 +502,32 @@ header {
   margin: 10px auto;
   }
 
- #second-modal .search-bar {
-    border: none;
-    background: none;
-    text-align: left; /* Выравнивание текста по левому краю */
-    display: flex;
-    flex-direction: column; /* Вертикальное расположение текста */
-    align-items: flex-start; /* Выравниваем элементы по левому краю */
-    gap: 5px; /* Расстояние между строками */
-    padding-left: 20px; /* Отступ слева для текстового блока */
+#second-modal .logo img {
+    width: 120px;
+    height: auto;
   }
+
+#second-modal .search-bar {
+    display: flex; /* Flexbox для размещения элементов */
+    align-items: left; /* Центрирование элементов по вертикали */
+    flex-grow: 1;
+    margin: 0 20px; /* Отступы вокруг строки поиска */
+    background-color: none;
+    border-radius: 20px;
+    padding: 5px 10px; /* Внутренние отступы */
+    border: none;
+    box-shadow: none;
+    position: relative;
+    flex-direction: column;
+}
+
 
 /* Содержимое */
 .form-section h2{
  font-family: 'Hargid';
- font-size: 34px;
+ font-size: 40px;
  position: absolute;
- top: 26%;
+ top: 24%;
  left: 8%;
 }
  #second-modal .modal-window {
@@ -544,6 +580,11 @@ form {
 input::placeholder {
     color: #ffffff;
   }
+
+input:focus {
+   outline: none;
+   box-shadow: none;
+}
 
 .form-section .selection {
  position: absolute;

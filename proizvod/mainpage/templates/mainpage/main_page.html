@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicketSpace</title>
+    <link rel="stylesheet" href="{% static 'mainpage/css/main_styles.css' %}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- ===== Link Swiper's CSS ===== -->
+     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+     <!-- ===== Fontawesome CDN Link ===== -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        .swiper-button-next, .swiper-button-prev {
+          color: #ffffff; /* Цвет стрелок */
+          border-radius: 50%; /* Круглая форма кнопки */
+          padding: 10px; /* Увеличиваем размер кликабельной зоны */
+        }
+
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+          color: #ffffff; /* Цвет стрелки при наведении */
+        }
+
+        /* Если хотите скрыть кнопки до наведения */
+        .swiper-button-next, .swiper-button-prev {
+          opacity: 0.5; /* Прозрачность по умолчанию */
+          transition: opacity 0.3s ease; /* Плавный переход */
+        }
+
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+          opacity: 1; /* Полная видимость при наведении */
+        }
+    </style>
+</head>
+<body>
+    <header>
+            <div class="search-box">
+                <div class="logo">
+                  <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                </div>
+                <div class="search-bar">
+                    <form method="POST" action="{% url 'search' %}">
+                        {% csrf_token %}
+                    <input type="text" name="search" placeholder="Поиск" value="{{ request.GET.search }}">
+                    <button type="submit">
+                        <img src="/static/eventpage/img/поиск лого.PNG" alt="Search">
+                    </button>
+                    </form>
+                </div>
+                <div class="city-select">
+                    <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
+                    <span class="city-text">ГОРОД</span>
+                    <ul class="dropdown">
+                        <li>Астана</li>
+                        <li>Алматы</li>
+                        <li>Шымкент</li>
+                        <li>Караганда</li>
+                    </ul>
+                </div>
+
+                <div class="profile">
+                    <button>
+                        <img src="/static/mainpage/img/profile.PNG" alt="Profile">
+                    </button>
+                </div>
+              </div>
+    </header>
+
+    <main>
+        <div>
+            <h2 class="carousel-title">
+                <span class="title-line"></span>
+                Афиша событий
+                <span class="title-line"></span>
+              </h2>
+            </div>
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="/static/mainpage/img/halloween_afisha.PNG" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="/static/mainpage/img/halloween_afisha.PNG" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="/static/mainpage/img/halloween_afisha.PNG" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+          <div>
+            <h2 class="carousel-title">
+                <span class="title-line"></span>
+                Актуальное
+                <span class="title-line"></span>
+              </h2>
+            </div>
+          <section>
+            <!-- карусель -->
+            <div class="swiper mySwiper container">
+              <div class="swiper-wrapper">
+
+                <!-- 1 -->
+                <div class="swiper-slide">
+                    <button>
+                        <img src="/static/eventpage/img/8MS.png" alt="постер1" />
+                    </button>
+                </div>
+
+                <!-- 2 -->
+                <div class="swiper-slide">
+                    <button>
+                        <img src="/static/eventpage/img/1AN.png" alt="постер2" />
+                    </button>
+                </div>
+
+                <!-- 3 -->
+                <div class="swiper-slide">
+                    <button>
+                        <img src="/static/eventpage/img/2MAMA.png" alt="постер3" />
+                    </button>
+                </div>
+
+                <!-- 4 -->
+                <div class="swiper-slide">
+                <button>
+                  <img src="/static/eventpage/img/3WWW.png" alt="постер4" />
+                </button>
+                </div>
+
+                <!-- 5 -->
+                <div class="swiper-slide">
+                <button>
+                  <img src="/static/eventpage/img/4ACP.png" alt="постер5" />
+                </button>
+                </div>
+
+                <!-- 6 -->
+                <div class="swiper-slide">
+                    <button>
+                      <img src="/static/eventpage/img/5CF.png" alt="постер6" />
+                    </button>
+                </div>
+
+                <!-- 7 -->
+                <div class="swiper-slide">
+                    <button>
+                        <img src="/static/eventpage/img/6CEB.png" alt="постер7" />
+                    </button>
+                </div>
+
+                <!-- 8 -->
+                <div class="swiper-slide">
+                    <button>
+                        <img src="/static/eventpage/img/7HPM.png" alt="постер8" />
+                    </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- кнопки -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+
+            <!-- точки (их не убираю, убрала ток из стайл, они тупо прозрачные, ибо тут джаваскр) -->
+            <div class="swiper-pagination"></div>
+          </section>
+
+          <!-- сслыка JS -->
+          <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+          <!-- вызыв карусели -->
+          <script>
+            var swiper = new Swiper(".mySwiper", {
+              spaceBetween: 30,
+              grabCursor: true,
+              loop: true,
+
+              // Pagination
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+
+              // Next and previous navigation
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+
+              // Responsive breakpoints
+              breakpoints: {
+                0: {
+                  slidesPerView: 1
+                },
+                768: {
+                  slidesPerView: 2
+                },
+                1024: {
+                  slidesPerView: 3
+                }
+              }
+            });
+          </script>
+
+          <div class="aitu-card">
+            <div class="aitu-card-content">
+              <h2 class="aitu-card-title">Карта </h2>
+              <h3 class="aitu-card-description">Так вам будет легче найти мероприятие!</h3>
+              <button class="aitu-card-button">Открыть</button>
+            </div>
+            <div class="aitu-card-image">
+                <button>
+                    <img src="/static/mainpage/img/map.png" alt="карта">
+                </button>
+              <div class="aitu-placeholder"></div>
+            </div>
+          </div>
+
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="ticket-logo">
+                  <img src="/static/mainpage/img/logo_main.PNG" alt="logo">
+              </div>
+            <!-- Секция с контактами -->
+          <div class="footer-section">
+              <h4><b>Помощь без выходных</b></h4>
+            <ul>
+              <li>+7 702 103 6038 - Diana</li>
+              <li>+7 700 984 9868 - Aiym</li>
+              <li><a href="mailto:help@ticketspace.kz">help@ticketspace.kz</a></li>
+            </ul>
+          </div>
+
+          <!-- Секция "О нас" -->
+          <div class="footer-section">
+            <ul>
+                <li><a href="#"><b>О нас</b></a></li>
+              <li><a href="#">Сотрудничество</a></li>
+              <li><a href="#">Способы оплаты</a></li>
+              <li><a href="#">Программа лояльности</a></li>
+            </ul>
+          </div>
+
+          <!-- Секция с логотипами -->
+          <div class="footer-section footer-logos">
+            <div class="logo-row">
+              <!-- Верхняя строка логотипов -->
+              <a href="https://astanahub.com" target="_blank">
+                <img src="/static/mainpage/img/astanahub.png" alt="Astana Hub">
+              </a>
+              <a href="https://ticketon.kz" target="_blank">
+                <img src="/static/mainpage/img/freedom.png" alt="Freedom Ticketon">
+              </a>
+            </div>
+            <!-- Увеличенный логотип -->
+            <a href="https://astanait.edu.kz" target="_blank" class="large-logo">
+              <img src="/static/mainpage/img/AITU.png" alt="Astana IT University">
+            </a>
+          </div>
+        </div>
+
+        <!-- Копирайт -->
+        <p class="footer-copyright">
+          &copy; 2007–2024 ТОО "TicketSpace". Все права защищены.
+        </p>
+      </footer>
+
+
+</body>
+</html>

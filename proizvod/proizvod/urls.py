@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('regandaut.urls')),
-    path('', include('main.urls')),
+    path('', include('mainpage.urls')),
     path('', include('eventpage.urls')),
     path('', include('figuration.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

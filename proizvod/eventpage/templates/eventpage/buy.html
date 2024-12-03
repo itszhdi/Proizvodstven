@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% if event %}
+    <title>Билет "{{event.name}}"</title>
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+    <link rel="stylesheet" href="{% static 'eventpage/css/ticket.css' %}">
+    <script>
+    window.onload = function() {
+        const externalUrl = "{{ external_url }}";
+        if (externalUrl) {
+            window.open(externalUrl, "_blank");
+        }
+    };
+</script>
+</head>
+<body>
+    <div class="ticket">
+        <div class="ticket-right">
+            <div class="ticket-image">
+                <img src="/static/eventpage/img/music.png" alt="Ticket Image">
+            </div>
+            <div class="ticket-logo">
+                <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
+            </div>
+            <div class="ticket-university">
+                <img src="/static/eventpage/img/AITU.png" alt="Astana University Logo">
+            </div>
+            <div class="ticket-info">
+                <p><b>{{ event.name }}</b></p>
+                <p><b>Дата:</b> <br>{{ event.date }}</p>
+                <p><b>Время:</b> <br>{{ event.time }}</p>
+                <p><b>Место:</b> <br>{{ event.place }}</p>
+            </div>
+        </div>
+
+        <div class="ticket-left">
+            <div class="ticket-qr-code">
+                <img src="/static/eventpage/img/EXAMPLE QR.png" alt="QR Code">
+            </div>
+            <div class="ticket-details">
+                <p><b>ID билета:</b> <br>{{ event.id }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

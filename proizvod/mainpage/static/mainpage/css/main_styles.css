@@ -1,0 +1,506 @@
+@font-face {
+  font-family: 'Hagrid';
+  src: url('/static/regandaut/font/Hagrid-Regular-trial.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Candara';
+  src: url('/static/regandaut/font/Candara.ttf') format('truetype');
+}
+
+/* Общие стили */
+body {
+    margin: 0;
+    font-family: 'Candara';
+    color: white;
+    margin: 0;
+    background:
+      linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9)),
+      url('/static/mainpage/img/stars.PNG') no-repeat center center;
+    background-size: cover;
+    color: white;
+  }
+
+/* настройка бокса посика */
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(134, 141, 212, 0.9); /* Light purple */
+    border-radius: 20px; /* Rounded corners */
+    padding: 17px 20px;
+    width: 85%; /* Adjust width as needed */
+    margin: 25px auto; /* Center it horizontally */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Logo */
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+
+/* сама строка поиска  */
+.search-bar {
+    display: flex; /* Flexbox для размещения элементов */
+    align-items: center; /* Центрирование элементов по вертикали */
+    flex-grow: 1;
+    margin: 0 20px; /* Отступы вокруг строки поиска */
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 20px;
+    padding: 5px 10px; /* Внутренние отступы */
+    border: 1px solid white; /* Белая рамка */
+    box-shadow: none;
+    position: relative; /* Для позиционирования кнопки внутри */
+}
+
+
+.search-bar input {
+    flex-grow: 1; /* Поле ввода занимает всю ширину */
+    font-size: 1.4rem;
+    background-color: rgba(134, 141, 212, 0.9);
+    font-family: 'Candara';
+    color: white;
+    border: none; /* Убираем стандартную рамку */
+    outline: none; /* Убираем обводку при фокусе */
+    padding: 5px 10px; /* Отступ внутри строки */
+    border-radius: 20px;
+}
+
+/* кнопка поиска */
+.search-bar button {
+    position: absolute; /* Абсолютное позиционирование */
+    right: 15px; /* Отступ от правого края контейнера */
+    top: 50%; /* Центрирование по вертикали */
+    transform: translateY(-50%); /* Коррекция смещения по вертикали */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.search-bar button img {
+    width: 32px;
+    height: auto;
+    margin-right: 2%;
+  }
+
+/* просто цвет строки */
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255); /* Lighter white for placeholder */
+    box-shadow: none;
+}
+
+/* кнопка профиля */
+.profile button {
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+}
+
+.profile button img {
+  width: 38px;
+  height: auto;
+  cursor: pointer;
+  margin: 0 25px 0 0 ;
+}
+
+/* сам комбобокс */
+    .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        text-align: center;
+    }
+    .city-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+    }
+    .city-select .dropdown li {
+        color: rgba(59, 67, 113, 0.9);
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .city-select .dropdown li:hover {
+        background-color: rgba(134, 141, 212, 0.9);
+        color: white;
+      }
+
+      .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        width: 20%; /* Фиксированная ширина в процентах */
+    }
+
+    .city-select button {
+        width: 100%; /* Кнопка растягивается по ширине родителя */
+        padding: 10px 20px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+    }
+
+    .city-select .dropdown {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Растягивается до ширины родителя */
+        display: none;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        text-align: center;
+    }
+
+    .city-select .icon {
+        width: 10%; /* Размер иконки в процентах от ширины родителя */
+        height: auto;
+    }
+
+
+  .city-select .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .city-select .dropdown li:hover {
+    background-color: rgba(134, 141, 212, 0.9);
+  }
+
+  .city-select:hover .dropdown {
+    display: block;
+}
+
+
+ /* Общий стиль для карусели */
+.event-carousel {
+    width: 100%; /* Карусель занимает всю ширину экрана */
+    text-align: center; /* Центрирование содержимого */
+    margin: 30px auto;
+    position: relative;
+  }
+
+  /* Заголовок карусели */
+.carousel-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff; /* Белый цвет текста */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Расстояние между текстом и линиями */
+    white-space: nowrap;
+    margin: 25px auto; /* Предотвращает перенос текста на новую строку */
+  }
+
+  /* Линии по бокам заголовка */
+  .title-line {
+    display: block;
+    height: 1px;
+    flex: 1; /* Линии равномерно растягиваются */
+    background-color: #fefefe; /* Светло-фиолетовый цвет */
+    max-width: 1000px; /* Максимальная длина линий */
+  }
+
+
+  /* Стиль для контейнера карусели */
+  .carousel {
+    position: relative;
+    width: 75%; /* Ширина изображений — 75% экрана */
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px; /* Закругленные углы карусели */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Тень вокруг карусели */
+  }
+
+  /* Изображения в карусели */
+  .carousel-inner img {
+    width: 100%;
+    height: 80vh; /* Высота изображений 80% высоты экрана */
+    object-fit: contain; /* Полностью показываем изображение без обрезки */
+    background-color: rgba(47, 52, 105, 0.9); /* Фон для картинок (если изображение не занимает всю площадь) */
+  }
+
+  /* Скрытый текст кнопок (для удобства чтения на экранных читателях) */
+  .visually-hidden {
+    display: none;
+  }
+
+  /* Адаптивность для карусели */
+  @media (max-width: 768px) {
+    .carousel-title {
+      font-size: 1.5rem;
+    }
+
+    .carousel-inner img {
+      height: 50vh; /* Уменьшаем высоту на меньших экранах */
+    }
+  }
+
+
+  /* конченая карусель */
+
+section {
+  position: relative;
+  width: 100%;
+  max-width: 10000px; /* Ограничение ширины карусели */
+  margin: 0 auto; /* Центрирование */
+  padding: 10px;
+}
+
+.swiper-container {
+  width: 100%;
+  height: auto;
+}
+
+/* кнопки-постеры */
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-slide button {
+background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+}
+.swiper-slide img {
+  width: 100%;
+  height: auto; /* Поддержка адаптивности изображений */
+  border-radius: 10px; /* Закругленные углы */
+  max-height: 450px; /* Ограничиваем высоту изображений */
+  object-fit: cover; /* Обрезка изображений */
+
+}
+
+/* /здесь убрала точки/ */
+.swiper-pagination {
+    display: none;
+}
+
+/*адоптивность  */
+@media (max-width: 768px) {
+  section {
+    padding: 15px;
+  }
+
+}
+
+/* карта */
+
+  .cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+
+  .card img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+ /* Общий стиль карточки */
+.aitu-card {
+    font-family: 'Candara';
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #868DD4; /* Фон карточки */
+    border-radius: 40px; /* Скругленные углы */
+    padding: 20px 30px; /* Внутренние отступы */
+    margin: 50px auto; /* Внешний отступ сверху и снизу, выравнивание по центру */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    max-width: 60%;  /* Максимальная ширина */
+}
+
+  /* Левая часть карточки (текст) */
+  .aitu-card-content {
+    flex: 1; /* Занимает все доступное пространство */
+    color: white;
+  }
+
+  /* Заголовок карточки */
+  .aitu-card-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0 15px 15px;
+  }
+
+  /* Описание карточки */
+  .aitu-card-description {
+    font-size: 24px;
+    margin: 0 15px 24px;
+    color: #eaeaea; /* Немного светлее для контраста */
+  }
+
+  /* Кнопка */
+  .aitu-card-button {
+    font-family: 'Candara';
+    margin: 0 15px 0;
+    padding: 10px 40px; /* Увеличиваем горизонтальные отступы */
+    font-size: 30px; /* Размер текста */
+    background-color: #2F3469; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    border: none; /* Убираем границу */
+    border-radius: 30px; /* Скругляем углы */
+    cursor: pointer; /* Добавляем указатель при наведении */
+    width: 70%; /* Устанавливаем фиксированную ширину */
+    text-align: center; /* Центруем текст */
+}
+
+
+  .aitu-card-button:hover {
+    background-color: rgba(73, 79, 140, 0.9); /* Светлее при наведении */
+  }
+
+/* Правая часть карточки (изображение) */
+.aitu-card-image {
+    flex-shrink: 0; /* Фиксированный размер */
+    width: 60%; /* 30% от ширины карточки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin-right: -3%;
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+  }
+  .aitu-card-image button{
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+  }
+
+  .aitu-card-image img {
+    width: 90%; /* Заполняет доступную ширину блока */
+    height: auto; /* Сохраняет пропорции */
+    border-radius: 40px; /* Скругленные углы для изображения */
+  }
+
+/* Общий стиль футера */
+footer {
+    font-family: 'Candara';
+    color: white;
+    background: linear-gradient(180deg, rgba(134, 141, 212, 0.3), rgba(47, 52, 105, 0.9));
+    padding: 20px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+  }
+
+  /* Контейнер футера */
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  /* Секции футера */
+  .footer-section {
+    flex: 1 1 300px;
+    max-width: 350px;
+  }
+
+  .ticket-logo img {
+     width: 197px;
+     height: 135px;
+  }
+
+  .footer-logos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Расстояние между строками */
+  }
+
+  /* Верхняя строка логотипов */
+  .logo-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Расстояние между логотипами */
+    width: 100%; /* Растягиваем по ширине секции */
+  }
+
+  /* Логотипы в верхней строке */
+  .logo-row a img {
+    width: 100%; /* Логотип занимает 1/6 длины футера */
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* анимация при наведении */
+  .logo-row a:hover img {
+    transform: scale(1.09); /* Увеличение при наведении */
+    opacity: 0.99;
+  }
+
+  /* Увеличенный логотип */
+  .large-logo img {
+    width: 45%; /* Логотип больше на 20% */
+    height: auto;
+    object-fit: contain;
+    margin-left: auto; /* Смещаем вправо */
+    margin-right: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* анимация */
+  .large-logo:hover img {
+    transform: scale(1.09); /* Увеличение при наведении */
+    opacity: 0.99;
+  }
+
+  /* Заголовки секций */
+  .footer-section h4 {
+    margin-bottom: 10px;
+    margin-left: 10%;
+    font-size: 1.2rem;
+  }
+
+  .footer-section ul {
+    list-style: none;
+  }
+
+  .footer-section ul li {
+    margin-bottom: 5px;
+  }
+
+  .footer-section ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .footer-section ul li a:hover {
+    color: rgba(134, 141, 212);
+  }
+
+  /* Копирайт */
+  .footer-copyright {
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 15px;
+    color: #fff;
+  }

@@ -19,7 +19,7 @@
                   <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
                 </div>
                 <div class="search-bar">
-                    <form method="POST" action="{% url 'search' %}">
+                    <form method="POST">
                         {% csrf_token %}
                     <input type="text" name="search" placeholder="Поиск" value="{{ request.GET.search }}">
                     <button type="submit">
@@ -28,7 +28,7 @@
                     </form>
                 </div>
                 <div class="city-select">
-                    <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
+                    <img src="/static/eventpage/img/СУКА.PNG" alt="Город" class="icon">
                     <span class="city-text">ГОРОД</span>
                     <ul class="dropdown">
                         <li>Астана</li>
@@ -75,8 +75,8 @@
                   <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
                 </div>
                 <div class="search-bar">
-                    <div class="name"> {{ event.name }} </div>
-                    <div class="place"> {{ event.place }} </div>
+                    <p class="name"> {{ event.name }} </p>
+                    <p class="place"> {{ event.place }} </p>
                 </div>
               </div>
             <div class="content">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="right">
                     <div class="time-left">
-                        <p><b>До конца продаж:</b></p>
+                        <p>До конца продаж: </p>
                         <div class="timer">{{ event.timer }}</div>
                     </div>
                     <div class="details">
@@ -119,7 +119,7 @@
         <div class="content">
             <div class="form-section">
                 <h2>Оформление заказа</h2>
-                <p class="selection"><b>Карта:</b></p>
+                <p class="selection">Карта:</p>
                 <form method="post">
                     {% csrf_token %}
                     <label for="card-number">Номер карты:</label>
@@ -148,11 +148,11 @@
             </div>
             <div class="details-section">
                 <div class="timer-section">
-                    <p><b>До конца продаж: </b></p>
+                    <p>До конца продаж: </p>
                     <div class="timer">{{ event.timer }}</div>
                 </div>
                 <div class="payment-options">
-                    <p><b>В приложении:</b></p>
+                    <p>В приложении:</p>
                 <div class="logos">
                     <a href="/redirect/kaspi/{{ event.id }}/">
                         <img src="/static/eventpage/img/kaspi.png" alt="Kaspi.kz">
