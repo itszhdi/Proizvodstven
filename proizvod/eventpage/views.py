@@ -57,7 +57,7 @@ def get_event_data(event_id):
 
 
 
-def enter_card_data(request):
+def enter_card_data(request, event_id):
     if request.method == "POST":
         card_number = request.POST.get('card')
         date = request.POST.get('date', '')
