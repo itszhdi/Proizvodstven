@@ -62,11 +62,16 @@ header {
     padding: 0 10px;
     margin: 15px auto; /* Center it horizontally */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    height: 115px;
   }
 
 .logo img {
   width: 150px;
   height: auto;
+}
+
+.logo a {
+  margin: 10px 10px;
 }
 
 .search-box {
@@ -88,7 +93,7 @@ header {
     padding: 5px 10px;
     width: 900px;
     position: absolute;
-    top: 34%;
+    top: 33%;
     left: 22%;
   }
 

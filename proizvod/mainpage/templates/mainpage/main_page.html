@@ -34,12 +34,26 @@
           opacity: 1; /* Полная видимость при наведении */
         }
     </style>
+
+    <script>
+  function refreshPage() {
+    if (window.location.pathname === "/") {
+      // Если пользователь уже на главной странице, просто обновляем её
+      window.location.reload();
+      return false;
+    }
+    return true;
+  }
+</script>
+
 </head>
 <body>
     <header>
             <div class="search-box">
                 <div class="logo">
-                  <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                  <a href="/" onclick="return refreshPage();">
+                    <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                  </a>
                 </div>
                 <div class="search-bar">
                     <form method="POST" action="{% url 'search' %}">
@@ -113,56 +127,56 @@
 
                 <!-- 1 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/8/'">
                         <img src="/static/eventpage/img/8MS.png" alt="постер1" />
                     </button>
                 </div>
 
                 <!-- 2 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/1/'">
                         <img src="/static/eventpage/img/1AN.png" alt="постер2" />
                     </button>
                 </div>
 
                 <!-- 3 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/2/'">
                         <img src="/static/eventpage/img/2MAMA.png" alt="постер3" />
                     </button>
                 </div>
 
                 <!-- 4 -->
                 <div class="swiper-slide">
-                <button>
+                <button onclick="window.location.href='/event/3/'">
                   <img src="/static/eventpage/img/3WWW.png" alt="постер4" />
                 </button>
                 </div>
 
                 <!-- 5 -->
                 <div class="swiper-slide">
-                <button>
+                <button onclick="window.location.href='/event/4/'">
                   <img src="/static/eventpage/img/4ACP.png" alt="постер5" />
                 </button>
                 </div>
 
                 <!-- 6 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/5/'">
                       <img src="/static/eventpage/img/5CF.png" alt="постер6" />
                     </button>
                 </div>
 
                 <!-- 7 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/6/'">
                         <img src="/static/eventpage/img/6CEB.png" alt="постер7" />
                     </button>
                 </div>
 
                 <!-- 8 -->
                 <div class="swiper-slide">
-                    <button>
+                    <button onclick="window.location.href='/event/7/'">
                         <img src="/static/eventpage/img/7HPM.png" alt="постер8" />
                     </button>
                 </div>

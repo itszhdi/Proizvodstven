@@ -62,7 +62,10 @@ body {
     color: #ffffff;
   }
 
-
+input:focus {
+   outline: none;
+   box-shadow: none;
+}
 
 .link {
   color: #ffffff;

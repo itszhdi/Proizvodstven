@@ -112,3 +112,13 @@ p{
     top: 60%;
     text-align: center;
 }
+
+.back-arrow {
+    position: absolute;
+    top: 30px;
+    left: 20px;
+  }
+
+  .back-arrow:hover {
+    opacity: 0.8;
+  }

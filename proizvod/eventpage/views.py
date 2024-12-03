@@ -5,6 +5,7 @@ from django.db import connection
 import re
 from datetime import datetime
 from django.urls import reverse
+from django.http import Http404
 
 
 def get_event_data(event_id):
@@ -53,8 +54,6 @@ def get_event_data(event_id):
     except Exception as e:
         print(f"Ошибка при получении данных: {e}")
         return None
-
-
 
 
 def enter_card_data(request, event_id):
@@ -146,5 +145,5 @@ def search_event(request):
         event_id = row[0]
         event_data = get_event_data(event_id)
     else:
-        event_data = None
+        raise Http404("Страница не найдена")
     return render(request, 'eventpage/search.html', {'event': event_data, 'search': search})

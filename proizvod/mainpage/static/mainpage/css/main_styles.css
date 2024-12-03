@@ -59,9 +59,9 @@ body {
 .search-bar input {
     flex-grow: 1; /* Поле ввода занимает всю ширину */
     font-size: 1.4rem;
+    color: white;
     background-color: rgba(134, 141, 212, 0.9);
     font-family: 'Candara';
-    color: white;
     border: none; /* Убираем стандартную рамку */
     outline: none; /* Убираем обводку при фокусе */
     padding: 5px 10px; /* Отступ внутри строки */
