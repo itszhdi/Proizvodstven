@@ -1,0 +1,24 @@
+document.addEventListener("DOMContentLoaded", function() {
+    var swiper = new Swiper('.swiper-container', {
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '" style="background-color: rgba(47, 52, 105, 0.9);"></span>';
+        }
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on: {
+        init: function() {
+          // Уменьшаем размер стрелок
+          document.querySelectorAll('.swiper-button-next, .swiper-button-prev').forEach(function(button) {
+            button.style.fontSize = '10px'; // Пример: изменяем размер стрелок
+          });
+        }
+      }
+    });
+  });
+  
