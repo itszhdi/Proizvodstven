@@ -359,7 +359,7 @@ background: none; /* Убираем фон кнопки */
     font-size: 30px; /* Размер текста */
     background-color: #2F3469; /* Цвет фона */
     color: #fff; /* Цвет текста */
-    border: none; /* Убираем границу */
+    border: 1.4px solid white;
     border-radius: 30px; /* Скругляем углы */
     cursor: pointer; /* Добавляем указатель при наведении */
     width: 70%; /* Устанавливаем фиксированную ширину */

@@ -1,4 +1,4 @@
 from django.shortcuts import render
 
-def figure_payment(request):
-    return render(request, 'figuration/payment.html')
+def figure_map(request):
+    return render(request, 'figuration/map_page.html')

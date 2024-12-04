@@ -11,4 +11,5 @@ urlpatterns = [
     path('', include('mainpage.urls')),
     path('', include('eventpage.urls')),
     path('', include('figuration.urls')),
+    path('', include('userpage.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

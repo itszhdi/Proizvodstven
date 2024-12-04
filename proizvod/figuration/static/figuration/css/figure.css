@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'Hagrid';
+  src: url('/static/regandaut/font/Hagrid-Regular-trial.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Candara';
+  src: url('/static/regandaut/font/Candara.ttf') format('truetype');
+}
+
+/* Общие стили */
+body {
+  margin: 0;
+  font-family: 'Candara';
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9));
+  color: white;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/static/eventpage/img/IMG_7283.PNG') no-repeat center center;
+  background-size: cover;
+  z-index: -1;
+  opacity: 1;
+}
