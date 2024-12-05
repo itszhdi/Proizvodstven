@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавьте событие</title>
+    <link rel="stylesheet" href="subm_event.css">
+</head>
+<body>
+    <button class="back-arrow">
+        <img src="resourse\Clip path group.png" alt = "back">
+    </button>
+    <div class="form-container">
+        <h1>Добавьте событие</h1>
+        <form action="#" method="post" class="event-form">
+            <input type="text" placeholder="Название мероприятия" required>
+            <textarea placeholder="Описание мероприятия" rows="4" required></textarea>
+            <input type="text" placeholder="Организатор" required>
+            <input type="text" placeholder="Категория" required>
+            <input type="text" placeholder="Город" required>
+            
+            <div class="date-time-container">
+                <input type="date" class="date-input">
+                <input type="time" class="time-input">
+            </div>
+            
+
+            <div class="file-upload">
+                <label for="poster-3x4" class="custom-file-upload">Загрузить постер 3x4</label>
+                <input type="file" id="poster-3x4" accept="image/png, image/jpeg">
+            </div>
+            
+            <div class="file-upload">
+                <label for="poster-16x9" class="custom-file-upload">Загрузить афишу 16x9 при наличии</label>
+                <input type="file" id="poster-16x9" accept="image/png, image/jpeg">
+            </div>
+            
+            <p>Сайт поддерживает PNG и JPG*</p>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>
