@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта мероприятий в Алматы</title>
+    <link rel="stylesheet" href="mapalmaty.css">
+</head>
+<body>
+    <header>
+            <button class="back-arrow">
+            <img src="resourse\Clip path group.png" alt = "back">
+            </button>
+        <div class="search-box">
+            <div class="logo">
+              <img src=".\resourse\лого2.PNG" alt="TicketSpace Logo">
+            </div>
+            <div class="search-bar">
+                <form method="get">
+              <input type="text" placeholder="Поиск"> 
+              <!-- добавить value="{{ request.GET.search }}" -->
+              <button>
+                <img src=".\resourse\поиск лого.PNG" alt="Search">
+              </button>
+            </form>
+        </div>
+            <div class="city-select">
+                <img src="./resourse\СУКА.PNG" alt="Город" class="icon"> 
+                <span class="city-text">ГОРОД</span>
+                <ul class="dropdown">
+                    <li>Астана</li>
+                    <li>Алматы</li>
+                    <li>Шымкент</li>
+                    <li>Караганда</li>
+                </ul>
+            </div>
+            
+            <div class="profile">
+                <button>
+                    <img src=".\resourse\frr kk.PNG" alt="Profile">
+                </button>
+            </div>
+          </div>         
+    </header>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="event-list">
+                <h2>Все мероприятия:</h2>
+                <ul>
+                    <li class="event-item">Отчетный концерт "Eurasia Band"</li>
+                </ul>
+            </div>
+            <div class="map-container">
+                <img src="resourse\карта алматы.PNG" alt="Карта Алматы">
+            </div>
+            <div class="pin Band">
+                <button>
+                    <span>Концерт "Eurasia Band"</span>
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
