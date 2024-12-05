@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта мероприятий в Алматы</title>
     <link rel="stylesheet" href="mapalmaty.css">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
 </head>
 <body>
     <header>
