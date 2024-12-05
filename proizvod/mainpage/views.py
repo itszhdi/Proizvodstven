@@ -6,7 +6,6 @@ def show_main_page(request):
 
 def event_detail(event_id):
     event_data = get_event_data(event_id)
-    print(get_event_data())
     if event_data:
         return redirect('event')
     else:

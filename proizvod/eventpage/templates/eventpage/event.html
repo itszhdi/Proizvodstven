@@ -127,15 +127,15 @@
                 <form method="post">
                     {% csrf_token %}
                     <label for="card-number">Номер карты:</label>
-                    <input type="text" id="card-number" name="card" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+                    <input type="text" id="card-number" name="card" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)" required>
                     <div class="row">
                         <div class="column">
                     <label for="expiry-date">Срок действия:</label>
-                    <input type="text" id="expiry-date" name="date" placeholder="MM/YY" required>
+                    <input type="text" id="expiry-date" name="date" placeholder="MM/YY" maxlength="5" oninput="formatDateInput(this)" required>
                         </div>
                         <div class="column">
                     <label for="cvv">CVV:</label>
-                    <input type="password" id="cvv" name="cvv" placeholder="***" required>
+                    <input type="password" id="cvv" name="cvv" maxlength="3" placeholder="***" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)" required>
                         </div>
                     </div>
                     {% if messages %}

@@ -118,11 +118,13 @@ button {
   .back-arrow:hover {
     opacity: 0.8;
   }
+
   .messages{
   font-family: Arial;
   font-size: 0.9rem;
   color: rgba(166, 13, 87, 0.9);
   }
+
 body::before {
   content: '';
   position: absolute;

@@ -8,6 +8,163 @@
     <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
 </head>
 <body>
-<h2>Тут позже будет профиль</h2>
+  <div class="account-page">
+    <header>
+      <a href="/" class="back-arrow">
+      <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
+    </header>
+      {% if user %}
+      <h2>Привет, {{ user.name }}!</h2>
+      {% else %}
+      <h2>Привет, пользователь!</h2>
+      {% endif %}
+    <main>
+        <div class="profile-picture">
+            {% if organizer%}
+            <img src="/static/userpage/img/organizer.png">
+            {% else %}
+            <img src="/static/userpage/img/user.png">
+            {% endif %}
+        </div>
+      <div class="profile-section">
+          {% if user %}
+              <button class="logout-button" onclick="window.location.href='/log/'">Выйти из аккаунта</button>
+            {% else %}
+              <button class="logout-button" onclick="window.location.href='/log/'">Войти</button>
+            {% endif %}
+        <button class="delete-button">Удалить аккаунт</button>
+      </div>
+      <div class="info-section">
+         <div class="info-item">
+                <p class="inf-desc">Имя пользователя: </p>
+                {% if user %}
+                <form method="POST" class="form-container">
+                    {% csrf_token %}
+                    <input type="text" name="user_name" value="{{ user.name }}" class="data" id="my">
+                    <button type="submit" class="action-button">Сохранить</button>
+                </form>
+                {% else %}
+                <input type="text" name="user_name" value="Вы не авторизованы!" class="data"  id="my1" readonly>
+                {% endif %}
+            </div>
+        <div class="info-item">
+            <p class="inf-desc">Статус: </p>
+            <div class="info-line">
+            <div class="data">Пользователь</div>
+                {% if organizer %}
+          <button class="action-button" id="add">Добавить</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="info-item">
+            <p class="inf-desc">Email: </p>
+            <div class="info-line">
+            {% if user %}
+              <div class="data">{{ user.email }}</div>
+            {% else %}
+              <div class="data">Вы не авторизованы!</div>
+            {% endif %}
+          <button class="action-button" id="open-email-change">Изменить</button>
+            </div>
+        </div>
+        <div class="info-item">
+            <p class="inf-desc">Пароль: </p>
+            <div class="info-line">
+          <div class="data">********</div>
+          <button class="action-button" id="open-password-change">Изменить</button>
+                {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="message {{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+    <!-- Модальное окно смены пароля -->
+    <div id="wind" class="modal">
+        <div class="modal-window">
+            <div class="container">
+                <h2>Сменить пароль</h2>
+                <div class="change-password">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- Скрытое поле для подтверждения запроса на смену пароля -->
+                        <input type="hidden" name="change_password" value="true">
+                        <input type="password" name="old-password" placeholder="Введите текущий пароль" required>
+                        <input type="password"  name="new-password" placeholder="Введите новый пароль" required>
+                        <input type="password" name="new-password-confirm" placeholder="Подтвердите пароль" required>
+                        <button type="submit" class="change-password">Подтвердить</button>
+                    </form>
+                </div>
+            </div>
+            <button class="close-window" id="close-modal">X</button>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+      <!-- Модальное окно смены почты -->
+    <div id="second-wind" class="modal">
+        <div class="modal-window">
+            <div class="container">
+                <h2>Сменить почту</h2>
+                <div class="change-password">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- Скрытое поле для подтверждения запроса на смену email -->
+                        <input type="hidden" name="change_mail" value="true">
+                        <input type="email" name="new-mail" placeholder="Введите новую почту" required>
+                        <input type="password" name="password" placeholder="Введите пароль" required>
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="message {{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                                    </div>
+                        {% endif %}
+                        <button type="submit" class="change-password">Подтвердить</button>
+                    </form>
+                </div>
+            </div>
+            <button class="close-window" id="close-second-modal">X</button>
+        </div>
+        <div class="overlay" id="second-overlay"></div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('wind');
+        const secondModal = document.getElementById('second-wind');
+        const openModalButton = document.getElementById('open-password-change');
+        const closeModalButton = document.getElementById('close-modal');
+        const overlay = document.getElementById('overlay');
+
+        const openSecondModalButton = document.getElementById('open-email-change');
+        const closeSecondModalButton = document.getElementById('close-second-modal');
+        const secondOverlay = document.getElementById('second-overlay');
+
+        // Функции для первого модального окна
+        const openModal = () => modal.classList.add('show');
+        const closeModal = () => modal.classList.remove('show');
+
+        // Функции для второго модального окна
+        const openSecondModal = () => {
+            modal.classList.remove('show'); // Закрываем первое окно
+            secondModal.classList.add('show'); // Открываем второе окно
+        };
+        const closeSecondModal = () => secondModal.classList.remove('show');
+
+        openModalButton.addEventListener('click', openModal);
+        closeModalButton.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+
+        openSecondModalButton.addEventListener('click', openSecondModal);
+        closeSecondModalButton.addEventListener('click', closeSecondModal);
+        secondOverlay.addEventListener('click', closeSecondModal);
+    </script>
 </body>
 </html>

@@ -16,6 +16,9 @@ try:
                 user_password TEXT NOT NULL
             );
             
+             ALTER TABLE Customers
+             ADD COLUMN user_name TEXT DEFAULT 'User';
+            
              CREATE TABLE IF NOT EXISTS Organizers (
                 organizer_id SERIAL PRIMARY KEY,
                 name VARCHAR(100)

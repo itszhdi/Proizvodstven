@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.db import connection
+from django.http import Http404
 from django.contrib.auth.hashers import make_password, check_password
 import re
 
@@ -43,28 +44,32 @@ def register(request):
 
     return render(request, 'regandaut/registration.html')
 
-
 def authorize(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT user_id, user_password FROM Customers WHERE user_mail = %s;", [email])
+                user_data = cursor.fetchone()
+                if user_data:
+                    user_id, stored_password = user_data
 
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT user_password FROM Customers WHERE user_mail = %s;", [email])
-            user_data = cursor.fetchone()
+                    if check_password(password, stored_password):
+                        # Сохраняем данные пользователя в сессии
+                        request.session['user_id'] = user_id
+                        request.session['email'] = email
+                        return redirect('main_page')
 
-            if user_data:
-                stored_password = user_data[0]
-
-                if check_password(password, stored_password):
-                    return redirect('main_page')
+                    else:
+                        messages.error(request, "Неверно введенные данные!")
 
                 else:
-                    messages.error(request, "Неверно введенные данные!")
+                    messages.error(request, "Вы не зарегистрированы!")
 
-            else:
-                messages.error(request, "Вы не зарегистрированы!")
-
-        return redirect('authorize')
+            return redirect('authorize')
+        except Exception as e:
+            print(f"Error! {e}")
+            raise Http404("Страница не найдена")
 
     return render(request, 'regandaut/authorization.html')
