@@ -140,7 +140,7 @@ textarea {
     padding: 10px;
     border: 2px solid rgba(255, 255, 255, 0.7);
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(47, 52, 105, 0.1);
     color: white;
     text-align: center;
     cursor: pointer;
@@ -150,7 +150,7 @@ textarea {
 
 
 .custom-file-upload:hover {
-    background-color: #867dd4;
+    background-color: rgba(134, 141, 212, 0.9);
     color: #fff;
 }
 
