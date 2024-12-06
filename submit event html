@@ -24,18 +24,33 @@
                 <input type="date" class="date-input">
                 <input type="time" class="time-input">
             </div>
+            <div class="file-upload">
+                <label for="poster-3x4" class="custom-file-upload">
+                    <span id="file-name-3x4">Загрузить постер 3x4</span>
+                </label>
+                <input type="file" id="poster-3x4" accept="image/png, image/jpeg" onchange="updateFileName('poster-3x4', 'file-name-3x4')">
+            </div>
             
+            <div class="file-upload">
+                <label for="poster-16x9" class="custom-file-upload">
+                    <span id="file-name-16x9">Загрузить афишу 16x9 при наличии</span>
+                </label>
+                <input type="file" id="poster-16x9" accept="image/png, image/jpeg" onchange="updateFileName('poster-16x9', 'file-name-16x9')">
+            </div>
+            <script>
+                
+                function updateFileName(inputId, labelId) {
+                const fileInput = document.getElementById(inputId);
+                const fileNameLabel = document.getElementById(labelId);
 
-            <div class="file-upload">
-                <label for="poster-3x4" class="custom-file-upload">Загрузить постер 3x4</label>
-                <input type="file" id="poster-3x4" accept="image/png, image/jpeg">
-            </div>
-            
-            <div class="file-upload">
-                <label for="poster-16x9" class="custom-file-upload">Загрузить афишу 16x9 при наличии</label>
-                <input type="file" id="poster-16x9" accept="image/png, image/jpeg">
-            </div>
-            
+                if (fileInput.files.length > 0) {
+                    fileNameLabel.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameLabel.textContent = "Файл не выбран";
+                }
+}
+
+            </script>
             <p>Сайт поддерживает PNG и JPG*</p>
             <button type="submit">Сохранить</button>
         </form>
