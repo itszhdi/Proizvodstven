@@ -387,6 +387,18 @@
     cursor: pointer;
   }
 
+.fest {
+    top: 64.2%; 
+    left: 54%;
+}
+
+.fest button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
 
 @keyframes pulse {
     0% {
