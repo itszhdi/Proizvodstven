@@ -89,6 +89,8 @@ h1 {
     box-shadow: none;
     position: relative;
     box-shadow: none;
+    font-family: 'Candara';
+    src: url('./шрифт/Candarai.ttf') format('truetype'); 
     color: white;
 }
 
