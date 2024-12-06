@@ -5,24 +5,24 @@ from django.http import Http404
 from django.contrib.auth.hashers import make_password, check_password
 import re
 
+def check_user_password(password):
+    password_regex = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
+    if not re.match(password_regex, password):
+        return False
+    return True
+
 def register(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        email_regex = r'^[^@\s]+@[^@\s]+\.[^@\s]+$'
-        if not re.match(email_regex, email):
-            messages.error(request, "Введите корректный адрес электронной почты.")
-            return redirect('register')
-
-        password_regex = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
-        if not re.match(password_regex, password):
-            messages.error(request, "Пароль должен содержать не менее 8 символов, включая буквы и цифры.")
-            return redirect('register')
-
         if password != confirm_password:
             messages.error(request, "Пароли не совпадают!")
+            return redirect('register')
+
+        if not check_user_password(password):
+            messages.error(request, "Пароль должен содержать не менее 8 символов, включая буквы и цифры.")
             return redirect('register')
 
         hashed_password = make_password(password)

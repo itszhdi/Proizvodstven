@@ -1,10 +1,75 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавьте событие</title>
+    <link rel="stylesheet" href="{% static 'userpage/css/add_event.css' %}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
 </head>
 <body>
+    <a href="/" class="back-arrow">
+      <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
+    <div class="form-container">
+        <h1>Добавьте событие</h1>
+        <form method="post" class="event-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="event_name" placeholder="Название мероприятия" required>
+            <textarea name="description" placeholder="Описание мероприятия" rows="4" required></textarea>
+            <input type="text" name="organizer" placeholder="Организатор" required>
+            <input type="text" name="category" placeholder="Категория" required>
+            <input type="text" name="address" placeholder="Город" required>
 
+            <div class="date-time-container">
+                <input type="date" name="event_date" class="date-input">
+                <input type="time" name="time" class="time-input">
+            </div>
+            <div class="file-upload">
+                <label for="poster-3x4" class="custom-file-upload">
+                    <span id="file-name-3x4">Загрузить постер 3x4</span>
+                </label>
+                <input type="file" name="photo_path" id="poster-3x4" accept="image/png, image/jpeg" onchange="updateFileName('poster-3x4', 'file-name-3x4')">
+                <input type="hidden" id="poster_base64" name="poster_base64">
+            </div>
+
+            <div class="file-upload">
+                <label for="poster-16x9" class="custom-file-upload">
+                    <span id="file-name-16x9">Загрузить афишу 16x9 при наличии</span>
+                </label>
+                <input type="file" id="poster-16x9" accept="image/png, image/jpeg" onchange="updateFileName('poster-16x9', 'file-name-16x9')">
+            </div>
+            <script>
+
+                function updateFileName(inputId, labelId) {
+                const fileInput = document.getElementById(inputId);
+                const fileNameLabel = document.getElementById(labelId);
+
+                if (fileInput.files.length > 0) {
+                    fileNameLabel.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameLabel.textContent = "Файл не выбран";
+                }
+
+
+                function toBase64(file, onSuccess) {
+                    let reader = new FileReader();
+                    reader.onload = () => onSuccess(reader.result);
+                    reader.readAsDataURL(file); // Преобразует файл в строку Base64
+                }
+
+                document.querySelector('input[type=file]').onchange = (event) => {
+                    toBase64(event.target.files[0], (base64String) => {
+                        // Здесь вы отправляете base64String на сервер
+                        document.getElementById('poster_base64').value = base64String;
+                    });
+                };
+                }
+            </script>
+            <p>Сайт поддерживает PNG и JPG*</p>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
 </body>
 </html>

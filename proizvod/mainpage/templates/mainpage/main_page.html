@@ -34,18 +34,6 @@
           opacity: 1; /* Полная видимость при наведении */
         }
     </style>
-
-    <script>
-  function refreshPage() {
-    if (window.location.pathname === "/") {
-      // Если пользователь уже на главной странице, просто обновляем её
-      window.location.reload();
-      return false;
-    }
-    return true;
-  }
-</script>
-
 </head>
 <body>
     <header>
@@ -70,8 +58,6 @@
                     <ul class="dropdown">
                         <li>Астана</li>
                         <li>Алматы</li>
-                        <li>Шымкент</li>
-                        <li>Караганда</li>
                     </ul>
                 </div>
 
@@ -261,10 +247,11 @@
           <!-- Секция "О нас" -->
           <div class="footer-section">
             <ul>
-                <li><a href="#"><b>О нас</b></a></li>
-              <li><a href="#">Сотрудничество</a></li>
-              <li><a href="#">Способы оплаты</a></li>
-              <li><a href="#">Программа лояльности</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley" target="_blank"><b>О нас</b></a></li>
+              <li><a href="#" target="_blank">Сотрудничество</a></li>
+              <li><a href="meme" target="_blank">Способы оплаты</a></li>
+              <li><a href="https://youtu.be/9nz55mGQEd0?si=vUrZPbBZTQXVo3rn" target="_blank">Программа лояльности</a></li>
+                <li><a href="https://youtu.be/1EzjwpDoBdw?si=kK7dCQpDedstsBxV" target="_blank">Поддержка</a></li>
             </ul>
           </div>
 
@@ -292,6 +279,80 @@
         </p>
       </footer>
 
+    <script>
+    // Получаем элементы
+    const citySelect = document.querySelector('.city-select');
+    const cityText = document.querySelector('.city-text');
+    const dropdown = document.querySelector('.dropdown');
+    const cityItems = dropdown.querySelectorAll('li');
 
+    // При клике на город, открываем или закрываем выпадающий список
+    citySelect.addEventListener('click', function() {
+        dropdown.classList.toggle('active');
+    });
+
+    // Обработчик клика по элементам списка
+    cityItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            // Изменяем текст в <span class="city-text">
+            cityText.textContent = item.textContent;
+
+            // Закрываем список после выбора города
+            dropdown.classList.remove('active');
+
+            // Отправляем AJAX-запрос на сервер для сохранения города в сессии
+            fetch('/set_city/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') // Получаем CSRF токен для безопасности
+                },
+                body: JSON.stringify({
+                    city: item.textContent // Отправляем выбранный город
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Можно обработать успешный ответ от сервера, если нужно
+                console.log('Город успешно сохранен');
+            })
+            .catch(error => console.error('Ошибка при отправке города:', error));
+        });
+    });
+
+    // Закрыть выпадающий список, если клик вне его
+    document.addEventListener('click', function(event) {
+        if (!citySelect.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Функция для получения CSRF токена (для отправки безопасных запросов в Django)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+    <script>
+      function refreshPage() {
+        if (window.location.pathname === "/") {
+          // Если пользователь уже на главной странице, просто обновляем её
+          window.location.reload();
+          return false;
+        }
+        return true;
+      }
+    </script>
 </body>
 </html>

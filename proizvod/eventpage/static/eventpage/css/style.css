@@ -278,6 +278,12 @@ header {
   font-size: 24px;
 }
 
+.event=details .submitting button {
+ position: absolute;
+ top: 40%;
+ right: 30%;
+}
+
 /* Кнопка "Купить билет" */
 .buy-ticket {
     margin-top: 2%;
@@ -675,11 +681,17 @@ input:focus {
 }
 
 
-  .back-arrow {
+.back-arrow {
     margin: 0 15px;
   }
 
-  .back-arrow:hover {
+.back-arrow img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
+
+.back-arrow:hover {
     opacity: 0.7;
   }
 

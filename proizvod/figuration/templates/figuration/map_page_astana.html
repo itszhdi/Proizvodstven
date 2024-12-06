@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта мероприятий в Астане</title>
+    <link rel="stylesheet" href="{% static 'figuration/css/astana.css'%}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+</head>
+<body>
+    <header>
+            <a href="/" class="back-arrow">
+                <img src="/static/eventpage/img/arrow.png" alt="<--">
+            </a>
+        <div class="search-box">
+            <div class="logo">
+              <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+            </div>
+            <div class="search-bar">
+                <form method="POST" action="{% url 'search' %}">
+                        {% csrf_token %}
+                    <input type="text" name="search" placeholder="Поиск" value="{{ request.GET.search }}">
+                    <button type="submit">
+                        <img src="/static/eventpage/img/поиск лого.PNG" alt="Search">
+                    </button>
+                </form>
+        </div>
+            <div class="city-select">
+                <img src="/static/mainpage/img/location.PNG""./resourse\СУКА.PNG" alt="Город" class="icon">
+                <span class="city-text">ГОРОД</span>
+                <ul class="dropdown">
+                    <li>Астана</li>
+                    <li>Алматы</li>
+                    <li>Шымкент</li>
+                    <li>Караганда</li>
+                </ul>
+            </div>
+
+            <div class="profile">
+                <button>
+                    <img src="/static/mainpage/img/profile.PNG" alt="Profile">
+                </button>
+            </div>
+          </div>
+    </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="event-list">
+                <h2>Все мероприятия:</h2>
+                <ul>
+                    <li class="event-item">Acoustic night</li>
+                    <li class="event-item">Miss & Mister AITU</li>
+                    <li class="event-item">Финал осенней серии "Что? Где? Когда?"</li>
+                    <li class="event-item">AITU Commencement Party</li>
+                    <li class="event-item">Club fair</li>
+                    <li class="event-item">СТУДЕНЧЕСКИЙ КИНОВЕЧЕР: Гарри Поттер и Кубок огня</li>
+                    <li class="event-item">Music Spooktacular</li>
+                </ul>
+            </div>
+            <div class="map-container">
+                <img src="/static/figuration/img/astana.PNG" alt="Карта Астаны">
+            </div>
+            <div class="pin AITU">
+                <button onclick="window.location.href='/event/1/'">
+                    <span>Мероприятия в AITU</span>
+                </button>
+            </div>
+            <div class="pin AITUCommencementParty">
+                <button onclick="window.location.href='/event/4/'">
+                    <span>AITU Commencement Party</span>
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

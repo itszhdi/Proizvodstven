@@ -31,6 +31,16 @@ body::before {
   opacity: 1;
 }
 
+.back-arrow img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
+
+.back-arrow:hover {
+    opacity: 0.7;
+  }
+
 header {
   position: absolute;
   top: 7%;
@@ -303,3 +313,62 @@ input:focus {
   top: 103%;
   left: 2%;
   }
+
+
+#third-wind .modal-window {
+    width: 625px;
+    height: 400px;
+}
+
+#third-wind .buttons {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 65%;
+  left: 25%;
+  gap: 30px;
+}
+
+#third-wind p {
+ position: absolute;
+ top: 50%;
+ left: 28%;
+ font-size: 20px;
+}
+
+#third-wind h2{
+ font-size: 32px;
+ left: 28%;
+}
+
+#third-wind .delete-acc {
+  border: 1.4px solid white;
+  border-radius: 20px;
+  background: #868DD4;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  padding: 15px;
+  width: 100px;
+  margin: 20px;
+}
+
+#third-wind .delete-acc:hover {
+  background: #2F3469;
+}
+
+#third-wind .delete-account input {
+  padding: 15px;
+  border: 1.5px solid white;
+  border-radius: 25px;
+  background: transparent;
+  color: white;
+  font-family: 'Candara';
+  font-size: 20px;
+  width: 500px;
+  box-sizing: border-box;
+  position: absolute;
+  left: 10%;
+  top: 33%;
+}

@@ -1,0 +1,443 @@
+@font-face {
+  font-family: 'Hagrid';
+  src: url('/static/regandaut/font/Hagrid-Regular-trial.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Candara';
+  src: url('/static/regandaut/font/Candara.ttf') format('truetype');
+  }
+
+  h1, h2 {
+    font-family: 'Hagrid';
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Candara';
+    color: white;
+    background:
+        url('/static/regandaut/img/stars.PNG') no-repeat center center,
+        linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9));
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    /* box-sizing: border-box; */
+}
+
+
+.back-arrow {
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем рамку кнопки */
+    padding: 0; /* Убираем отступы кнопки */
+    position: absolute; /* Абсолютное позиционирование */
+    top: 5%; /* Позиционирование по вертикали */
+    left: 20px; /* Отступ слева */
+    width: auto; /* Пусть ширина зависит от содержимого */
+    height: auto; /* Высота также зависит от содержимого */
+    cursor: pointer; /* Указатель в виде руки при наведении */
+    transition: opacity 0.2s ease;
+}
+
+.back-arrow img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
+
+.back-arrow:hover {
+    opacity: 0.7;
+  }
+
+/* настройка бокса посика */
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(134, 141, 212, 0.9); /* Light purple */
+    border-radius: 20px; /* Rounded corners */
+    padding: 10px 20px;
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto; /* Center it horizontally */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    height: 85px;
+}
+
+/* Logo */
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+
+/* сама строка поиска  */
+.search-bar {
+    display: flex; /* Flexbox для размещения элементов */
+    align-items: center; /* Центрирование элементов по вертикали */
+    flex-grow: 1;
+    margin: 0 20px; /* Отступы вокруг строки поиска */
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 20px;
+    padding: 5px 10px; /* Внутренние отступы */
+    border: 1px solid white; /* Белая рамка */
+    box-shadow: none;
+    position: relative; /* Для позиционирования кнопки внутри */
+}
+
+
+.search-bar input {
+    flex-grow: 1; /* Поле ввода занимает всю ширину */
+    font-size: 1.4rem;
+    background-color: transparent;
+    font-family: 'Candara';
+    color: white;
+    border: none; /* Убираем стандартную рамку */
+    outline: none; /* Убираем обводку при фокусе */
+    padding: 5px 10px; /* Отступ внутри строки */
+    border-radius: 20px;
+}
+
+/* кнопка поиска */
+.search-bar button {
+    position: absolute; /* Абсолютное позиционирование */
+    right: 15px; /* Отступ от правого края контейнера */
+    top: 50%; /* Центрирование по вертикали */
+    transform: translateY(-50%); /* Коррекция смещения по вертикали */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* иконка кнопки поиска */
+.search-bar button img {
+    width: 30px; /* Размер иконки */
+    height: auto;
+}
+
+/* когда начинаешь вводить текст начинается ебала с тенью - убрала*/
+.search-bar input:focus {
+    outline: none; /* Убирает стандартную рамку браузера */
+    box-shadow: none; /* Убирает любые тени */
+}
+
+/* просто цвет строки */
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255); /* Lighter white for placeholder */
+    box-shadow: none;
+}
+
+/* комбобокс фото */
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .location img {
+    width: 20px;
+    height: auto;
+  }
+
+/* кнопка профиля */
+.profile button {
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+}
+
+.profile button img {
+    width: 35px; /* Размер иконки */
+    height: auto;
+}
+
+/* сам комбобокс */
+    .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        text-align: center;
+    }
+    .city-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+    }
+    .city-select .dropdown li {
+        color: rgba(59, 67, 113, 0.9);
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .city-select .dropdown li:hover {
+        background-color: rgba(134, 141, 212, 0.9);
+        color: white;
+      }
+
+      .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        width: 20%; /* Фиксированная ширина в процентах */
+    }
+
+    .city-select button {
+        width: 100%; /* Кнопка растягивается по ширине родителя */
+        padding: 10px 20px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+    }
+
+    .city-select .dropdown {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Растягивается до ширины родителя */
+        display: none;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        text-align: center;
+    }
+
+    .city-select .icon {
+        width: 8%; /* Размер иконки в процентах от ширины родителя */
+        height: auto;
+    }
+
+
+  .city-select .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .city-select .dropdown li:hover {
+    background-color: rgba(134, 141, 212, 0.9);
+  }
+
+  .city-select:hover .dropdown {
+    display: block;
+}
+
+/* не ебу я что оно в конце стайла для поиска делает, но я не трогаю  */
+  .search-bar input {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px rgba(134, 141, 212, 0.9);
+    background: none;
+  }
+
+
+  .location {
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+
+.logo img {
+    width: 100px;
+    height: auto;
+}
+.back-button img,
+.location img,
+.profile button img,
+.search-bar button img {
+    width: 30px;
+    height: auto;
+}
+
+.event-list {
+    flex: 1;
+    max-width: 40%;
+    padding: 20px;
+    margin: 20px; /* Внешние отступы */
+    overflow-y: auto; /* Скролл при переполнении */
+    max-height: 80vh; /* Ограничиваем высоту */
+}
+
+.event-list h2 {
+    font-family: 'Hagrid', sans-serif; /* Используем заданный шрифт */
+    font-size: 1.5rem; /* Размер заголовка */
+    margin-bottom: 15px; /* Отступ снизу */
+    color: rgba(255, 255, 255, 0.9); /* Белый с прозрачностью */
+}
+
+.event-list ul {
+    list-style: none; /* Убираем стандартные маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0;
+}
+
+.event-item {
+    background-color: rgba(134, 141, 212, 0.9); /* Фон элемента */
+    color: white; /* Цвет текста */
+    border-radius: 15px; /* Скругленные углы */
+    padding: 10px 15px; /* Внутренние отступы */
+    margin-bottom: 10px; /* Отступ между элементами */
+    font-size: 1.2rem; /* Размер текста */
+    font-family: 'Candara', sans-serif; /* Шрифт для текста */
+    display: flex; /* Для выравнивания по центру */
+    align-items: center; /* Вертикальное выравнивание */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer; /* Курсор руки при наведении */
+}
+
+.event-item:hover {
+    background-color: rgba(134, 141, 212, 1); /* Ярче при наведении */
+    transform: translateY(-2px); /* Легкий подъем */
+}
+
+.event-item:last-child {
+    margin-bottom: 0; /* Убираем отступ у последнего элемента */
+}
+
+/* Main content container */
+.main-content {
+    display: flex; /* Используем Flexbox для размещения элементов в ряд */
+    flex-direction: row; /* Горизонтальное расположение */
+    justify-content: space-between; /* Расстояние между элементами */
+    align-items: flex-start; /* Выравнивание по верхнему краю */
+    padding: 20px; /* Внутренние отступы для контейнера */
+}
+
+
+/* Main content */
+.map-container {
+    flex: 1;
+    max-width: 50%;
+    position: relative; /* Устанавливаем карту как родительский контейнер для точек */
+    height: auto;
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 20px;
+    border: 1px solid white;
+    overflow: hidden;
+    margin-top: 105px;
+}
+
+
+.map-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+
+.pin {
+    background: rgba(134, 141, 212, 1);
+    position: absolute; /* Абсолютное позиционирование внутри карты */
+    height: 0.7em;
+    width: 0.7em;
+    border-radius: 50%;
+}
+
+.pin::before {
+    content: '';
+    background: rgba(134, 141, 212, 0.7);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    border-radius: 50%;
+    animation: pulse 1.3s ease-in-out infinite;
+}
+
+.pin span {
+    display: inline-block;
+    white-space: nowrap;
+    position: absolute;
+    left: 1.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    border-radius: 3em;
+    padding: 0.3em 0.6em;
+    font-size: 0.9em;
+    color: #000;
+}
+
+.Band {
+    top: 46%;
+    left: 78%;
+}
+
+.Band button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+.fest {
+    top: 65.5%;
+    left: 54%;
+}
+
+.fest button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}
+
+.city-list {
+    flex: 1;
+    padding: 20px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.city-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.city-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.city-item {
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.city-item:hover {
+    background-color: rgba(134, 141, 212, 1);
+    cursor: pointer;
+}

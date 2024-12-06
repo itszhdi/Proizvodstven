@@ -31,9 +31,9 @@
           {% if user %}
               <button class="logout-button" onclick="window.location.href='/log/'">Выйти из аккаунта</button>
             {% else %}
-              <button class="logout-button" onclick="window.location.href='/log/'">Войти</button>
+              <button class="logout-button" onclick="window.location.href='/authorize/'">Войти</button>
             {% endif %}
-        <button class="delete-button">Удалить аккаунт</button>
+        <button class="delete-button" id="open-third-modal">Удалить аккаунт</button>
       </div>
       <div class="info-section">
          <div class="info-item">
@@ -41,20 +41,23 @@
                 {% if user %}
                 <form method="POST" class="form-container">
                     {% csrf_token %}
-                    <input type="text" name="user_name" value="{{ user.name }}" class="data" id="my">
+                    <input type="hidden" name="change_name" value="true">
+                    <input type="text" name="user_name" value="{{ user.name }}" class="data">
                     <button type="submit" class="action-button">Сохранить</button>
                 </form>
                 {% else %}
-                <input type="text" name="user_name" value="Вы не авторизованы!" class="data"  id="my1" readonly>
+                <input type="text" name="user_name" value="Вы не авторизованы!" class="data" readonly>
                 {% endif %}
             </div>
         <div class="info-item">
             <p class="inf-desc">Статус: </p>
             <div class="info-line">
-            <div class="data">Пользователь</div>
                 {% if organizer %}
-          <button class="action-button" id="add">Добавить</button>
-                {% endif %}
+              <div class="data">Организатор</div>
+                <button class="action-button" id="add" onclick="window.location.href='/add/'">Добавить</button>
+            {% else %}
+              <div class="data">Пользователь</div>
+            {% endif %}
             </div>
         </div>
         <div class="info-item">
@@ -136,6 +139,44 @@
         <div class="overlay" id="second-overlay"></div>
     </div>
 
+    <!-- Модальное окно удаления аккаунта -->
+    <div id="third-wind" class="modal">
+        <div class="modal-window">
+            <div class="container">
+                <h2>Удалить аккаунт</h2>
+                <div class="delete-account">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- Скрытое поле для подтверждения запроса на удаление аккаунта -->
+                        <input type="hidden" name="delete_account" value="true">
+                        <input type="password" name="password" placeholder="Введите текущий пароль" required>
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="message {{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                                    </div>
+                        {% endif %}
+                        <p><i>Действительно удалить аккаунт?</i></p>
+                        <div class="buttons">
+                        <button type="submit" class="delete-acc">Удалить</button>
+                        <button class="delete-acc" onclick="window.location.href='/user/'">Отмена</button>
+                        {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="message {{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                                    </div>
+                        {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <button class="close-window" id="close-third-modal">X</button>
+        </div>
+        <div class="overlay" id="third-overlay"></div>
+    </div>
+
     <script>
         const modal = document.getElementById('wind');
         const secondModal = document.getElementById('second-wind');
@@ -165,6 +206,25 @@
         openSecondModalButton.addEventListener('click', openSecondModal);
         closeSecondModalButton.addEventListener('click', closeSecondModal);
         secondOverlay.addEventListener('click', closeSecondModal);
+
+        const thirdModal = document.getElementById('third-wind');
+        const openThirdModalButton = document.getElementById('open-third-modal');
+        const closeThirdModalButton = document.getElementById('close-third-modal');
+        const thirdOverlay = document.getElementById('third-overlay');
+
+        // Функции для третьего модального окна
+        const openThirdModal = () => {
+            // Закрываем другие окна, если они открыты
+            modal.classList.remove('show');
+            secondModal.classList.remove('show');
+            thirdModal.classList.add('show'); // Открываем третье окно
+        };
+        const closeThirdModal = () => thirdModal.classList.remove('show');
+
+        // Добавление обработчиков событий
+        openThirdModalButton.addEventListener('click', openThirdModal);
+        closeThirdModalButton.addEventListener('click', closeThirdModal);
+        thirdOverlay.addEventListener('click', closeThirdModal);
     </script>
 </body>
 </html>

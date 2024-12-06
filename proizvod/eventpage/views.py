@@ -2,32 +2,15 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
 from django.db import connection
-import re
 from datetime import datetime
 from django.urls import reverse
 from django.http import Http404
-
 
 def get_event_data(event_id):
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT
-                    event_name, 
-                    event_date, 
-                    description, 
-                    category, 
-                    name AS organizer_name, 
-                    time, 
-                    address, 
-                    photo_path, 
-                    price,
-                    timer(event_id) AS timer,
-                    event_id
-                FROM Events
-                JOIN Categories USING (category_id)
-                JOIN Organizers USING (organizer_id)
-                JOIN Tickets USING (event_id)
+                SELECT * FROM event_info
                 WHERE event_id = %s;
             """, [event_id])
             row = cursor.fetchone()
@@ -61,12 +44,6 @@ def enter_card_data(request, event_id):
         card_number = request.POST.get('card')
         date = request.POST.get('date', '')
         cvv = request.POST.get('cvv', '')
-
-        card_number_regex = r'^\d{16}$'
-        if not re.match(card_number_regex, card_number):
-            messages.error(request, "Номер карты должен содержать 16 цифр без пробелов.")
-            return False
-
         try:
             expiry_date = datetime.strptime(date, "%m/%y")
             if expiry_date < datetime.now():
@@ -75,20 +52,15 @@ def enter_card_data(request, event_id):
         except ValueError:
             messages.error(request, "Введите корректную дату в формате MM/YY.")
             return False
-
-        cvv_regex = r'^\d{3}$'
-        if not re.match(cvv_regex, cvv):
-            messages.error(request, "CVV код должен содержать 3 цифры.")
-            return False
-
     return True
-
-
 
 
 
 def open_event_page(request, event_id):
     event_data = get_event_data(event_id)
+    user_id = request.session.get('user_id')
+    if not user_id:  # Если пользователь не авторизован
+        return redirect('authorize')  # Перенаправляем на страницу авторизации
 
     if request.method == "POST":
         if not enter_card_data(request, event_id):
@@ -97,10 +69,9 @@ def open_event_page(request, event_id):
             return redirect(reverse('buy', args=[event_id]))
 
     if event_data is None:
-        return render(request, 'mainpage/main_page.html')
+        return redirect('main_page')
 
     return render(request, 'eventpage/event.html', {'event': event_data})
-
 
 
 
