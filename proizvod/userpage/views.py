@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import connection
 from django.contrib import messages
+from django.conf import settings
+from django.core.files.storage import default_storage
 from regandaut.views import check_user_password
-import base64
+import os
 
 
 # Функция проверки текущего пароля (проверка для изменения данных)
@@ -180,12 +182,6 @@ def update_mail(request):
     if request.method == 'POST':
         new_mail = request.POST.get('new-mail')
         password = request.POST.get('password')
-
-        email_regex = r'^[^@\s]+@[^@\s]+\.[^@\s]+$'
-        if not re.match(email_regex, new_mail):
-            messages.error(request, "Введите корректный адрес электронной почты.")
-            return redirect('user')
-
         try:
             with connection.cursor() as cursor:
                 cursor.execute("""SELECT user_password FROM Customers WHERE user_id = %s;""", [user_id])
@@ -244,38 +240,93 @@ def logout_user(request):
 
 
 
-def open_adder_page(request):
-    return render(request, 'userpage/add_event.html')
-
-
+# Добавление мероприятия через окно организатора
 def add_event(request):
     if request.method == 'POST':
         # Получение данных из формы
         event_name = request.POST.get('event_name')
         description = request.POST.get('description')
-        organizer = request.POST.get('organizer')
-        category = request.POST.get('category')
+        organizer_name = request.POST.get('organizer')
+        category_name = request.POST.get('category')
         city = request.POST.get('city')
         address = request.POST.get('address')
         event_date = request.POST.get('event_date')
         time = request.POST.get('time')
         photo_path = request.FILES.get('photo_path')
-        poster_base64 = request.POST.get('poster_base64')  # Получаем Base64-строку
+        price = request.POST.get('price')
 
-        # Декодирование Base64 в бинарный формат
-        poster_binary = base64.b64decode(poster_base64.split(",")[1])
+        photo_folder = os.path.join(settings.MEDIA_ROOT, 'eventpage', 'img')
+        os.makedirs(photo_folder, exist_ok=True)
 
-        # Сохранение данных в базу
+        if photo_path:
+            photo_filename = f"{event_name.replace(' ', '_')}_{photo_path.name}"
+            photo_full_path = os.path.join(photo_folder, photo_filename)
+
+            # Записываем файл в папку
+            with default_storage.open(photo_full_path, 'wb+') as destination:
+                for chunk in photo_path.chunks():
+                    destination.write(chunk)
+
+            # Сохраняем путь к файлу в базе данных
+            photo_url = photo_filename
+        else:
+            photo_url = None
+
+        # Добавление организатора
         try:
             with connection.cursor() as cursor:
                 cursor.execute("""
-                            INSERT INTO Events (event_name, description, organizer_id, category_id, city, address, event_date, time, poster_data)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        """, [event_name, description, organizer_id, category_id, city, address, event_date, time,
-                              poster_binary])
+                            SELECT organizer_id FROM Organizers WHERE LOWER(name) = LOWER(%s)
+                        """, [organizer_name])
+                organizer_id = cursor.fetchone()
+
+                if not organizer_id:
+                    cursor.execute("""
+                                INSERT INTO Organizers (name) VALUES (%s) RETURNING organizer_id
+                            """, [organizer_name])
+                    organizer_id = cursor.fetchone()[0]
+                else:
+                    organizer_id = organizer_id[0]
+        except Exception as e:
+            print(f"Ошибка при добавлении организатора: {e}")
+
+        # Добавление категории
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                            SELECT category_id FROM Categories WHERE LOWER(category) = LOWER(%s)
+                        """, [category_name])
+                category_id = cursor.fetchone()
+
+                if not category_id:
+                    cursor.execute("""
+                                INSERT INTO Categories (category) VALUES (%s) RETURNING category_id
+                            """, [category_name])
+                    category_id = cursor.fetchone()[0]
+                else:
+                    category_id = category_id[0]
+        except Exception as e:
+            print(f"Ошибка при добавлении категории: {e}")
+
+        # Добавление события
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO Events (event_name, description, organizer_id, category_id, city, address, event_date, time, photo_path)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING event_id;
+                """, [event_name, description, organizer_id, category_id, city, address, event_date, time, photo_url])
+
+                event_id = cursor.fetchone()[0]
+
+                cursor.execute("""
+                    INSERT INTO Tickets (event_id, price)
+                    VALUES (%s, %s);
+                """, [event_id, price])
             messages.success(request, "Событие успешно добавлено!")
         except Exception as e:
-            print(f"Ошибка: {e}")
+            print(f"Ошибка при добавлении события: {e}")
             messages.error(request, "Не удалось сохранить событие.")
-        return redirect('events_list')
+
+    return render(request, 'userpage/add_event.html')
 

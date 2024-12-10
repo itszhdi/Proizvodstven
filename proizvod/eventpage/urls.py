@@ -5,4 +5,5 @@ urlpatterns = [
     path('buy/<int:event_id>/', views.buy_ticket,name='buy'),
     path('redirect/<str:site>/<int:event_id>/', views.redirect_to_site, name='redirect'),
     path('search/', views.search_event, name='search'),
+    path('process_order/<int:event_id>/', views.process_order, name='process_order')
 ]

@@ -48,18 +48,17 @@ header {
 }
 
 h2 {
-  font-family: 'Hagrid';
-  font-size: 40px;
+  font-family: 'Candara';
+  font-size: 58px;
   font-weight: bold;
   position: absolute;
-  top: 2%;
   left: 14%;
 }
 
 .profile-section {
   text-align: center;
   position: absolute;
-  bottom: 10%;
+  bottom: 9%;
   left: 20%;
   display: flex;
   flex-direction: column;
@@ -81,8 +80,9 @@ h2 {
 
 .info-section {
  position: absolute;
- top: 14.5%;
- right: 12%;
+ top: 16%;
+ right: 11%;
+ margin-left: 10%;
 }
 
 .info-line {
@@ -242,13 +242,17 @@ h2 {
   }
 
 #wind .container h2 {
-  font-size: 40px;
-  margin: 7% 14%;
+  font-size: 48px;
+  position: absolute;
+  top: 8%;
+  left: 30%;
 }
 
 #second-wind .container h2 {
-  font-size: 40px;
-  margin: 12% 15%;
+  font-size: 48px;
+  position: absolute;
+  top: 10%;
+  left: 30%;
 }
 
 .change-password form {
@@ -371,4 +375,127 @@ input:focus {
   position: absolute;
   left: 10%;
   top: 33%;
+}
+
+
+
+/* Адаптивность для экранов шириной до 1200px */
+@media (max-width: 1200px) {
+  body {
+    font-size: 90%;
+  }
+
+  .profile-picture img {
+    max-width: 250px;
+    max-height: 250px;
+  }
+
+  .data {
+    width: 400px;
+  }
+
+  .info-section {
+    top: 20%;
+    right: 5%;
+  }
+
+  .modal-window {
+    width: 700px;
+    height: 500px;
+  }
+}
+
+/* Адаптивность для экранов шириной до 992px */
+@media (max-width: 992px) {
+  h2 {
+    font-size: 48px;
+    left: 10%;
+  }
+
+  .data {
+    width: 350px;
+    font-size: 20px;
+  }
+
+  .profile-picture {
+    left: 15%;
+  }
+
+  .info-section {
+    top: 25%;
+    right: 5%;
+  }
+
+  .modal-window {
+    width: 600px;
+    height: 450px;
+  }
+}
+
+/* Адаптивность для экранов шириной до 768px */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    font-size: 85%;
+  }
+
+  .profile-section {
+    position: static;
+    margin: 20px auto;
+  }
+
+  .info-section {
+    position: static;
+    margin: 20px auto;
+    text-align: center;
+  }
+
+  .profile-picture {
+    position: static;
+    margin: 0 auto 10px;
+  }
+
+  .modal-window {
+    width: 90%;
+    height: auto;
+  }
+
+  h2 {
+    font-size: 36px;
+    position: static;
+    text-align: center;
+  }
+
+  .data {
+    width: 90%;
+    font-size: 18px;
+  }
+
+  .change-password input {
+    width: 90%;
+  }
+}
+
+/* Адаптивность для экранов шириной до 576px */
+@media (max-width: 576px) {
+  .profile-picture img {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .data {
+    font-size: 16px;
+  }
+
+  .logout-button,
+  .delete-button {
+    width: 90%;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .change-password button {
+    font-size: 20px;
+    max-width: 100%;
+  }
 }

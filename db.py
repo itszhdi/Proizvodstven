@@ -48,11 +48,9 @@ try:
                 city VARCHAR(100) NOT NULL,
                 time VARCHAR(50) NOT NULL,
                 address VARCHAR(100) NOT NULL,
-                photo_path TEXT NOT NULL
+                photo_path TEXT NOT NULL,
+                poster TEXT
             );
-            
-            ALTER TABLE Events
-            ADD COLUMN poster_data BYTEA;
             
             CREATE TABLE IF NOT EXISTS Tickets (
                 ticket_id SERIAL PRIMARY KEY,
@@ -84,7 +82,7 @@ try:
                     ('Отчетный концерт "Eurasia Band"', '22-11-2024', 'We invite Friends from AITU to attend the Eurasia Band reporting concert. Unforgettable impressions and a warm welcome await you!', 2,2, 'Astana', '17:00', 'Kazhymukan 11, edu&lab','6CEB.png'),
                     ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire". Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png'),
                     ('Music Spooktacular', '31-10-2024', 'Through the fog of an October night, when the world of the living and the dead almost touch, we invite you to the “Music Spooktacular”', 2,2, 'Astana', '17:00', 'Assembly Hall','8MS.png'),
-                    ('IT FEST 2024','06-12-2024','Conquer the world of technology at ITFest 2024! You are ambitious, striving for new knowledge and want to bring your ideas to life, and ITFest is exactly the place where you can start your path to success!',4,3,'Almaty','9:00','КЦДС Атамекен','ITF9');
+                    ('IT FEST 2024','06-12-2024','Conquer the world of technology at ITFest 2024! You are ambitious, striving for new knowledge and want to bring your ideas to life, and ITFest is exactly the place where you can start your path to success!',4,3,'Almaty','9:00','КЦДС Атамекен','ITF9.png');
                     
             
             INSERT INTO Tickets(event_id,price)
@@ -133,16 +131,35 @@ try:
                 description, 
                 category, 
                 name AS organizer_name, 
-                time, 
+                time,
                 address, 
                 photo_path, 
                 price,
                 timer(event_id) AS timer,
-                event_id
+                event_id,
+                city,
+                ticket_id
                 FROM Events
                 LEFT JOIN Categories USING (category_id)
                 LEFT JOIN Organizers USING (organizer_id)
                 LEFT JOIN Tickets USING (event_id);
+                
+                
+                CREATE OR REPLACE FUNCTION validate_email()
+                RETURNS TRIGGER AS $$
+                BEGIN
+                    IF NEW.user_mail !~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+                        RAISE EXCEPTION 'Invalid email: %', NEW.user_mail;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+                
+                
+                CREATE TRIGGER email_validation_trigger
+                BEFORE INSERT OR UPDATE ON Customers
+                FOR EACH ROW
+                EXECUTE FUNCTION validate_email();
             """)
             print("ok")
 except psycopg2.Error as e:

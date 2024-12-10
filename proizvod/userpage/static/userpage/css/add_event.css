@@ -17,7 +17,7 @@ body {
     font-family: 'Candara';
     src: url('/static/regandaut/font/Candarai.ttf') format('truetype');
     background:
-      url('/static/userpage/img/starsx2.PNG') no-repeat center center,
+      url('/static/userpage/img/stars for add.PNG') no-repeat center center,
       linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9));
     color: white;
     margin: 0;
@@ -28,7 +28,9 @@ body {
     height: 100vh;
 }
 
-.back-arrow {
+
+  /* Кнопка "Назад" */
+  .back-arrow {
     background: none;
     border: none;
     padding: 0;
@@ -42,30 +44,97 @@ body {
 }
 
 .back-arrow img {
-    width: 40px;
+    width: 30px;
     height: auto;
     display: block;
 }
 
 .back-arrow:hover {
-    opacity: 0.7;
+    opacity: 0.8;
+}
+
+.back-arrow:active {
+    opacity: 1;
+}
+
+  /* Общий контейнер для разделения на левую и правую части */
+  .container {
+    display: flex;
+    width: 100%;
+    max-width: 1400px;
+    height: 80%;
+    background: rgba(134, 141, 212, 0.2);
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
   }
 
-.form-container {
-    background-color: rgba(47, 52, 105, 0.3);
-    padding: 100px;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    width: 700px;
+  /* Левая часть (для постера 16x9) */
+  .left-section {
+    flex: 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .poster-container {
+    margin-top: 25%;
+    margin-left: 5%;
+    width: 90%;
+    height: 60%;
+    border: 2px dashed white;
+    background-color:rgba(47, 52, 105, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .poster-container:hover {
+    background: rgba(134, 141, 212, 0.2);
+  }
+
+  .poster-container input[type="file"] {
+    display: none;
+  }
+
+
+.file-name {
+    position: relative;
+    font-size: 20px;
+    color: rgba(255, 255, 255);
+    text-align: center;
+  }
+
+.text {
+    position: relative;
+    font-size: 16px;
+    color: rgba(255, 255, 255);
     text-align: center;
 }
 
-h1 {
-    font-family: 'Hagrid', sans-serif;
-    font-size: 1.8rem;
+
+  /* Правая часть (поля ввода и кнопка) */
+  .right-section {
+    flex: 3;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .right-section h1,h2,h3 {
+    font-size: 24px;
+    text-align: center;
     margin-bottom: 20px;
     color: white;
-}
+  }
 
 .event-form input[type="text"],
 .event-form textarea,
@@ -74,11 +143,11 @@ h1 {
 .event-form input[type="file"],
 .event-form button {
     width: 100%;
-    padding: 15px;
+    padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
     border: none;
-    font-size: 20px;
+    font-size: 1rem;
     background-color:rgba(47, 52, 105, 0.1);
     border-radius: 20px;
     padding: 5px 10px;
@@ -86,9 +155,23 @@ h1 {
     box-shadow: none;
     position: relative;
     box-shadow: none;
+}
+
+.event-form input[type="text"],
+.event-form textarea,
+.event-form input[type="date"],
+.event-form input[type="time"],
+.event-form input[type="file"],
+.event-form button {
     font-family: 'Candara';
-    src: url('/static/regandaut/font/Candarai.ttf') format('truetype');
+    src: url('./шрифт/Candarai.ttf') format('truetype');
     color: white;
+}
+
+.event-form input::placeholder,
+.event-form textarea::placeholder {
+    color: rgb(255, 255, 255);
+    font-size: 0.9rem;
 }
 
 
@@ -102,62 +185,14 @@ h1 {
     color: white;
 }
 
-
-textarea {
-    resize: none;
-}
-
-.event-form input::placeholder,
-.event-form textarea::placeholder {
-    color: rgb(255, 255, 255);
-    font-size: 0.9rem;
-}
-
-.event-form input[type="file"] {
-    background-color: rgba(47, 52, 105, 0.3);
-    color: white;
-    cursor: pointer;
-
-}
-
-.event-form input[type="file"] {
-    display: none;
-}
-
-
-.file-upload {
-    position: relative;
-    display: inline-block;
-    margin: 10px 0;
-    width: 100%;
-}
-
-
-.custom-file-upload {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    background-color: rgba(47, 52, 105, 0.1);
-    color: white;
-    text-align: center;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-
-.custom-file-upload:hover {
-    background-color: rgba(134, 141, 212, 0.9);
-    color: #fff;
-}
-
 .date-time-container {
-    width: 720px;
-    display: flex;
+    width: 300px;
     gap: 10px;
-}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
 input[type="date"],
 input[type="time"] {
@@ -165,55 +200,54 @@ input[type="time"] {
     border: 2px solid rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     background-color: transparent;
-    color: white; /* Цвет текста */
+    color: white;
     font-size: 1rem;
     cursor: pointer;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-    filter: invert(1); /* Инвертирует цвета значка, делает его белым */
+    filter: invert(1);
     cursor: pointer;
 }
 
 input[type="date"]:focus,
 input[type="time"]:focus {
     outline: none;
-    border-color: #867dd4;
+    border-color: rgba(47, 52, 105, 0.9);
 }
 
-.event-form button {
-    background-color: #868DD4;
-    border: 1px solid white;
+  .date-input,
+  .time-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    font-size: 1.4rem;
+    font-size: 14px;
+    outline: none;
+  }
+
+  /* Кнопка "Добавить ивент" */
+  button[type="submit"] {
+    background:(rgba(134, 141, 212, 0.9));
+    color: white;
+    border: 1.5px solid white;
+    padding: 15px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+    font-size: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
 
-.event-form button:hover {
-    background-color: #2F3469;
-}
+  button[type="submit"]:hover {
+    transform: scale(1.005);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
 
-.row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.row input {
-    width: calc(50% - 5px);
-}
-
-.row label {
-    display: block;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-p {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 10px;
-}
+.messages{
+  font-family: Arial;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  }

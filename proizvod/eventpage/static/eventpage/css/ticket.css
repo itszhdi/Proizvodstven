@@ -41,12 +41,12 @@ body::before {
 }
 
 .ticket-right {
-    width: 43%;
+    width: 50%;
     height: 60%;
     padding: 20px;
     position: absolute;
     top: 22%;
-    left: 16%;
+    left: 13%;
     text-align: center;
     background-color: #868DD4;
     color: white;
@@ -59,7 +59,7 @@ body::before {
     padding: 20px;
     position: absolute;
     top: 22%;
-    left: 59%;
+    left: 63.2%;
     text-align: center;
     background-color: #868DD4;
     color: white;
@@ -71,18 +71,18 @@ body::before {
     height: auto;
     position: absolute;
     top: 5%;
-    left: 53%;
+    left: 46%;
 }
 
 .ticket-info {
     position: absolute;
-    left: 55%;
-    top: 22%;
+    left: 48%;
+    top: 21%;
     text-align: left;
 
 }
-p{
- margin: 12% 0;
+p {
+ margin: 10% 0;
  font-size: 28px;
  font-family: 'Candara';
 }
@@ -98,7 +98,7 @@ p{
     height: auto;
     position: absolute;
     top: 0;
-    left: 1%;
+    left: 0;
 }
 
 .ticket-qr-code {
@@ -118,6 +118,12 @@ p{
     top: 30px;
     left: 20px;
   }
+
+.back-arrow img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
 
   .back-arrow:hover {
     opacity: 0.8;

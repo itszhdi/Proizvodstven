@@ -42,7 +42,7 @@
                 <form method="POST" class="form-container">
                     {% csrf_token %}
                     <input type="hidden" name="change_name" value="true">
-                    <input type="text" name="user_name" value="{{ user.name }}" class="data">
+                    <input type="text" name="user_name" value="{{ user.name }}" class="data" maxlength="30">
                     <button type="submit" class="action-button">Сохранить</button>
                 </form>
                 {% else %}
@@ -121,15 +121,8 @@
                         {% csrf_token %}
                         <!-- Скрытое поле для подтверждения запроса на смену email -->
                         <input type="hidden" name="change_mail" value="true">
-                        <input type="email" name="new-mail" placeholder="Введите новую почту" required>
+                        <input type="email" id="email" name="new-mail" placeholder="Введите новую почту" required>
                         <input type="password" name="password" placeholder="Введите пароль" required>
-                        {% if messages %}
-                        <div class="messages">
-                            {% for message in messages %}
-                                <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endfor %}
-                                    </div>
-                        {% endif %}
                         <button type="submit" class="change-password">Подтвердить</button>
                     </form>
                 </div>
@@ -150,24 +143,10 @@
                         <!-- Скрытое поле для подтверждения запроса на удаление аккаунта -->
                         <input type="hidden" name="delete_account" value="true">
                         <input type="password" name="password" placeholder="Введите текущий пароль" required>
-                        {% if messages %}
-                        <div class="messages">
-                            {% for message in messages %}
-                                <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endfor %}
-                                    </div>
-                        {% endif %}
                         <p><i>Действительно удалить аккаунт?</i></p>
                         <div class="buttons">
                         <button type="submit" class="delete-acc">Удалить</button>
                         <button class="delete-acc" onclick="window.location.href='/user/'">Отмена</button>
-                        {% if messages %}
-                        <div class="messages">
-                            {% for message in messages %}
-                                <div class="message {{ message.tags }}">{{ message }}</div>
-                            {% endfor %}
-                                    </div>
-                        {% endif %}
                         </div>
                     </form>
                 </div>

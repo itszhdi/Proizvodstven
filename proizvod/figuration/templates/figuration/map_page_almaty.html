@@ -28,12 +28,10 @@
         </div>
             <div class="city-select">
                 <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
-                <span class="city-text">ГОРОД</span>
+                <span class="city-text">{{ city|default:"Город" }}</span>
                 <ul class="dropdown">
                     <li>Астана</li>
                     <li>Алматы</li>
-                    <li>Шымкент</li>
-                    <li>Караганда</li>
                 </ul>
             </div>
 
@@ -48,25 +46,84 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="event-list">
-                <h2>Все мероприятия:</h2>
+                <h2>Мероприятия Алматы:</h2>
                 <ul>
-                    <li class="event-item">Отчетный концерт "Eurasia Band"</li>
-                    <li class="event-item">ITFest 2024</li>
+                    {% for event in events %}
+                    <li class="event-item">
+                      <a href="/event/{{ event.1 }}/">{{ event.0 }}</a>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="map-container">
-                <img src='/static/figuration/img/almaty.PNG' alt="Карта Алматы">
-            </div>
-            <div class="pin Band">
-                <button onclick="window.location.href='/event/6/'">
-                    <span>Концерт "Eurasia Band"</span>
-                </button>
-            </div>
-            <div class="pin fest">
-                <button onclick="window.location.href='/event/9/'">
-                    <span>ITFest 2024</span>
-                </button>
+                 <iframe width="900" height="500" src="https://www.openstreetmap.org/export/embed.html?bbox=76.7436453924393%2C43.12604547425635%2C77.12370368101352%2C43.336915146231846&amp;layer=mapnik" style="border: 2px solid white"></iframe>
             </div>
         </main>
 </body>
+
+    <script>
+    // Получаем элементы
+    const citySelect = document.querySelector('.city-select');
+    const cityText = document.querySelector('.city-text');
+    const dropdown = document.querySelector('.dropdown');
+    const cityItems = dropdown.querySelectorAll('li');
+
+    // При клике на город, открываем или закрываем выпадающий список
+    citySelect.addEventListener('click', function() {
+        dropdown.classList.toggle('active');
+    });
+
+    // Обработчик клика по элементам списка
+    cityItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            // Изменяем текст в <span class="city-text">
+            cityText.textContent = item.textContent;
+
+            // Закрываем список после выбора города
+            dropdown.classList.remove('active');
+
+            // Отправляем AJAX-запрос на сервер для сохранения города в сессии
+            fetch('/set_city/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') // Получаем CSRF токен для безопасности
+                },
+                body: JSON.stringify({
+                    city: item.textContent // Отправляем выбранный город
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Можно обработать успешный ответ от сервера, если нужно
+                console.log('Город успешно сохранен');
+            })
+            .catch(error => console.error('Ошибка при отправке города:', error));
+        });
+    });
+
+    // Закрыть выпадающий список, если клик вне его
+    document.addEventListener('click', function(event) {
+        if (!citySelect.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Функция для получения CSRF токена (для отправки безопасных запросов в Django)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
 </html>

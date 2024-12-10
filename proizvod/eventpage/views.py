@@ -26,7 +26,9 @@ def get_event_data(event_id):
                     'image': row[7],
                     'price': row[8],
                     'timer': row[9],
-                    'id': row[10]
+                    'id': row[10],
+                    'current': row[11],
+                    'ticket_id': row[12]
                 }
                 if row[9] == '0':
                     event_data['timer'] = 'SOLD OUT!'
@@ -39,22 +41,6 @@ def get_event_data(event_id):
         return None
 
 
-def enter_card_data(request, event_id):
-    if request.method == "POST":
-        card_number = request.POST.get('card')
-        date = request.POST.get('date', '')
-        cvv = request.POST.get('cvv', '')
-        try:
-            expiry_date = datetime.strptime(date, "%m/%y")
-            if expiry_date < datetime.now():
-                messages.error(request, "Введите корректную дату.")
-                return False
-        except ValueError:
-            messages.error(request, "Введите корректную дату в формате MM/YY.")
-            return False
-    return True
-
-
 
 def open_event_page(request, event_id):
     event_data = get_event_data(event_id)
@@ -63,15 +49,15 @@ def open_event_page(request, event_id):
         return redirect('authorize')  # Перенаправляем на страницу авторизации
 
     if request.method == "POST":
-        if not enter_card_data(request, event_id):
-            return redirect(reverse('event', args=[event_id]))
-        else:
             return redirect(reverse('buy', args=[event_id]))
 
     if event_data is None:
         return redirect('main_page')
 
-    return render(request, 'eventpage/event.html', {'event': event_data})
+    from mainpage.views import get_city
+    city = get_city(request)
+    return render(request, 'eventpage/event.html',
+                  {'event': event_data, 'city': city})
 
 
 
@@ -80,9 +66,13 @@ EXTERNAL_SITES = {
     'qiwi': 'https://qiwi.com/',
 }
 
+
+
 def buy_ticket(request, event_id):
     event_data = get_event_data(event_id)
     return render(request, 'eventpage/buy.html', {'event': event_data})
+
+
 
 def redirect_to_site(request, site, event_id):
     event_data = get_event_data(event_id)
@@ -117,4 +107,39 @@ def search_event(request):
         event_data = get_event_data(event_id)
     else:
         raise Http404("Страница не найдена")
-    return render(request, 'eventpage/search.html', {'event': event_data, 'search': search})
+
+    from mainpage.views import get_city
+    city = get_city(request)
+    return render(request, 'eventpage/search.html', {'event': event_data, 'search': search, 'city': city})
+
+
+def process_order(request, event_id):
+    if request.method == "POST":
+        user_id = request.session.get('user_id')
+        try:
+            with connection.cursor() as cursor:
+                # Проверяем, существует ли запись с ненулевым user_id
+                cursor.execute(
+                    "SELECT ticket_id, price FROM tickets WHERE event_id = %s AND user_id IS NOT NULL",
+                    [event_id]
+                )
+                existing_ticket = cursor.fetchone()
+
+                if existing_ticket:
+                    price = existing_ticket[1]
+                    cursor.execute(
+                        "INSERT INTO tickets (event_id, user_id, price) VALUES (%s, %s, %s)",
+                        [event_id, user_id, price]
+                    )
+                else:
+                    cursor.execute(
+                        "UPDATE tickets SET user_id = %s WHERE event_id = %s AND user_id IS NULL",
+                        [user_id, event_id]
+                    )
+            messages.success(request, "Билет успешно оформлен!")
+        except Exception as e:
+            messages.error(request, f"Произошла ошибка: {str(e)}")
+            return redirect('event', event_id=event_id)
+        return redirect('buy', event_id=event_id)
+    else:
+        return redirect('buy', event_id=event_id)

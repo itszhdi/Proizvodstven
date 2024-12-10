@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password, check_password
 import re
 
 def check_user_password(password):
-    password_regex = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
+    password_regex = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$'
     if not re.match(password_regex, password):
         return False
     return True
@@ -22,7 +22,7 @@ def register(request):
             return redirect('register')
 
         if not check_user_password(password):
-            messages.error(request, "Пароль должен содержать не менее 8 символов, включая буквы и цифры.")
+            messages.error(request, "Пароль должен содержать не менее 8 символов, включая буквы, цифры и специальные символы.")
             return redirect('register')
 
         hashed_password = make_password(password)

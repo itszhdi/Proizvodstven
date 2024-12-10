@@ -54,7 +54,7 @@
                 </div>
                 <div class="city-select">
                     <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
-                    <span class="city-text">ГОРОД</span>
+                    <span class="city-text">{{ city|default:"Город" }}</span>
                     <ul class="dropdown">
                         <li>Астана</li>
                         <li>Алматы</li>
@@ -108,66 +108,18 @@
             </div>
           <section>
             <!-- карусель -->
-            <div class="swiper mySwiper container">
-              <div class="swiper-wrapper">
-
-                <!-- 1 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/8/'">
-                        <img src="/static/eventpage/img/8MS.png" alt="постер1" />
-                    </button>
-                </div>
-
-                <!-- 2 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/1/'">
-                        <img src="/static/eventpage/img/1AN.png" alt="постер2" />
-                    </button>
-                </div>
-
-                <!-- 3 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/2/'">
-                        <img src="/static/eventpage/img/2MAMA.png" alt="постер3" />
-                    </button>
-                </div>
-
-                <!-- 4 -->
-                <div class="swiper-slide">
-                <button onclick="window.location.href='/event/3/'">
-                  <img src="/static/eventpage/img/3WWW.png" alt="постер4" />
-                </button>
-                </div>
-
-                <!-- 5 -->
-                <div class="swiper-slide">
-                <button onclick="window.location.href='/event/4/'">
-                  <img src="/static/eventpage/img/4ACP.png" alt="постер5" />
-                </button>
-                </div>
-
-                <!-- 6 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/5/'">
-                      <img src="/static/eventpage/img/5CF.png" alt="постер6" />
-                    </button>
-                </div>
-
-                <!-- 7 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/6/'">
-                        <img src="/static/eventpage/img/6CEB.png" alt="постер7" />
-                    </button>
-                </div>
-
-                <!-- 8 -->
-                <div class="swiper-slide">
-                    <button onclick="window.location.href='/event/7/'">
-                        <img src="/static/eventpage/img/7HPM.png" alt="постер8" />
-                    </button>
+              <div class="swiper mySwiper container">
+                <div class="swiper-wrapper">
+                  {% for event in events %}
+                    <div class="swiper-slide">
+                      <button onclick="window.location.href='/event/{{ event.0 }}/'">
+                        <img src="{% static 'eventpage/img/' %}{{ event.1 }}" alt="постер {{ event.0 }}"
+                        onerror="this.onerror=null; this.src='/media/eventpage/img/{{ event.1 }}';" />
+                      </button>
+                    </div>
+                  {% endfor %}
                 </div>
               </div>
-            </div>
 
             <!-- кнопки -->
             <div class="swiper-button-next"></div>
@@ -248,7 +200,7 @@
           <div class="footer-section">
             <ul>
                 <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley" target="_blank"><b>О нас</b></a></li>
-              <li><a href="#" target="_blank">Сотрудничество</a></li>
+              <li><a href="https://t.me/sotrud_TS_bot" target="_blank">Сотрудничество</a></li>
               <li><a href="meme" target="_blank">Способы оплаты</a></li>
               <li><a href="https://youtu.be/9nz55mGQEd0?si=vUrZPbBZTQXVo3rn" target="_blank">Программа лояльности</a></li>
                 <li><a href="https://youtu.be/1EzjwpDoBdw?si=kK7dCQpDedstsBxV" target="_blank">Поддержка</a></li>

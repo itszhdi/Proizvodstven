@@ -17,7 +17,7 @@ h1, h2 {
     font-family: 'Candara';
     color: white;
     background:
-        url('/static/regandaut/img/stars.PNG') no-repeat center center,
+        url('/static/figuration/img/starshere.PNG') no-repeat center center,
         linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9));
     background-size: cover;
     display: flex;
@@ -440,4 +440,9 @@ h1, h2 {
 .city-item:hover {
     background-color: rgba(134, 141, 212, 1); /* Более яркий цвет при наведении */
     cursor: pointer;
+}
+
+.event-item a {
+    text-decoration: none;
+    color: white;
 }

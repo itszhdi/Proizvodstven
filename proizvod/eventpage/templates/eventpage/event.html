@@ -31,12 +31,10 @@
                 </div>
                 <div class="city-select">
                     <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
-                    <span class="city-text">ГОРОД</span>
+                    <span class="city-text">{{ city|default:"Город" }}</span>
                     <ul class="dropdown">
                         <li>Астана</li>
                         <li>Алматы</li>
-                        <li>Шымкент</li>
-                        <li>Караганда</li>
                     </ul>
                 </div>
 
@@ -48,10 +46,12 @@
               </div>
     </header>
     <div class="container">
-        <div class="content">
-            <div class="event-image">
-                <img src="/static/eventpage/img/{{ event.image }}" alt="Event poster">
+        <div class="event-image">
+                <img src="/static/eventpage/img/{{ event.image }}"
+                     alt="Event poster"
+                     onerror="this.onerror=null; this.src='/media/eventpage/img/{{ event.image }}';">
             </div>
+        <div class="content">
             <div class="event-details">
                 <h2>{{ event.name }}</h2>
                 <p class="description-p"><strong>Описание</strong></p>
@@ -59,6 +59,7 @@
                     {{ event.description }}
                 </p>
                 <div class="info">
+                    <p><strong>Город: </strong> {{ event.current }} </p>
                     <p><strong>Место: </strong> {{ event.place }} </p>
                     <p><strong>Тип мероприятия: </strong> {{ event.category }} </p>
                     <p><strong>Дата: </strong>{{ event.date }}</p>
@@ -66,6 +67,11 @@
                     <p><strong>Организатор: </strong>{{ event.organizer }}</p>
                 </div>
                 <button class="buy-ticket" id="open-modal">Купить билет</button>
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
@@ -86,7 +92,11 @@
             <div class="content">
                 <div class="left">
                     <div class="image-frame">
-                        <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
+                        {% if event.current == "Astana" %}
+                            <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
+                        {% elif event.current == "Almaty" %}
+                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=76.89937227491365%2C43.21964169623557%2C76.91500418905245%2C43.22623230741559&amp;layer=hot" style="border: 2px solid white"></iframe>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="right">
@@ -124,14 +134,17 @@
             <div class="form-section">
                 <h2>Оформление заказа</h2>
                 <p class="selection"><b>Карта:</b></p>
-                <form method="post">
+                <form method="post" action="{% url 'process_order' event.id %}">
                     {% csrf_token %}
                     <label for="card-number">Номер карты:</label>
                     <input type="text" id="card-number" name="card" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="16" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)" required>
                     <div class="row">
                         <div class="column">
                     <label for="expiry-date">Срок действия:</label>
-                    <input type="text" id="expiry-date" name="date" placeholder="MM/YY" maxlength="5" oninput="formatDateInput(this)" required>
+                    <input type="text" id="expiry-date" name="date"
+                           placeholder="MM/YY" maxlength="5" oninput="formatDateInput(this)"
+                           required
+                           onkeypress="return isNumberKey(event)">
                         </div>
                         <div class="column">
                     <label for="cvv">CVV:</label>
@@ -204,6 +217,93 @@
         secondOverlay.addEventListener('click', closeSecondModal);
 
     </script>
+
+    <script>
+    // Получаем элементы
+    const citySelect = document.querySelector('.city-select');
+    const cityText = document.querySelector('.city-text');
+    const dropdown = document.querySelector('.dropdown');
+    const cityItems = dropdown.querySelectorAll('li');
+
+    // При клике на город, открываем или закрываем выпадающий список
+    citySelect.addEventListener('click', function() {
+        dropdown.classList.toggle('active');
+    });
+
+    // Обработчик клика по элементам списка
+    cityItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            // Изменяем текст в <span class="city-text">
+            cityText.textContent = item.textContent;
+
+            // Закрываем список после выбора города
+            dropdown.classList.remove('active');
+
+            // Отправляем AJAX-запрос на сервер для сохранения города в сессии
+            fetch('/set_city/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') // Получаем CSRF токен для безопасности
+                },
+                body: JSON.stringify({
+                    city: item.textContent // Отправляем выбранный город
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Можно обработать успешный ответ от сервера, если нужно
+                console.log('Город успешно сохранен');
+            })
+            .catch(error => console.error('Ошибка при отправке города:', error));
+        });
+    });
+
+    // Закрыть выпадающий список, если клик вне его
+    document.addEventListener('click', function(event) {
+        if (!citySelect.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Функция для получения CSRF токена (для отправки безопасных запросов в Django)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+<script>
+    // Функция для форматирования ввода
+    function formatDateInput(input) {
+        // Удаляем все символы, кроме цифр
+        let value = input.value.replace(/\D/g, '');
+
+        // Если введено больше 2 символов, добавляем слэш после второго
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+
+        // Ограничиваем длину до 5 символов (MM/YY)
+        input.value = value.substring(0, 5);
+    }
+
+    // Разрешаем ввод только цифр
+    function isNumberKey(event) {
+        const charCode = event.which ? event.which : event.keyCode;
+        return charCode >= 48 && charCode <= 57; // Только цифры (0-9)
+    }
+</script>
 
 </body>
 </html>
