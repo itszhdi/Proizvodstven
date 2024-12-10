@@ -95,7 +95,7 @@
                         {% if event.current == "Astana" %}
                             <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
                         {% elif event.current == "Almaty" %}
-                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=76.89937227491365%2C43.21964169623557%2C76.91500418905245%2C43.22623230741559&amp;layer=hot" style="border: 2px solid white"></iframe>
+                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=76.89937227491365%2C43.21964169623557%2C76.91500418905245%2C43.22623230741559&amp;layer=layer=mapnik&amp;marker=43.2209552,76.9051127" style="border: 2px solid white"></iframe>
                         {% endif %}
                     </div>
                 </div>
@@ -304,6 +304,5 @@
         return charCode >= 48 && charCode <= 57; // Только цифры (0-9)
     }
 </script>
-
 </body>
 </html>

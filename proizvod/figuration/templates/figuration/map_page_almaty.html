@@ -7,6 +7,8 @@
     <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
     <title>Карта мероприятий в Алматы</title>
     <link rel="stylesheet" href="{% static 'figuration/css/almaty.css'%}">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
     <header>
@@ -55,10 +57,28 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="map-container">
-                 <iframe width="900" height="500" src="https://www.openstreetmap.org/export/embed.html?bbox=76.7436453924393%2C43.12604547425635%2C77.12370368101352%2C43.336915146231846&amp;layer=mapnik" style="border: 2px solid white"></iframe>
-            </div>
+                 <div class="map-container" id="map" style="width: 900px; height: 500px;"></div>
         </main>
+
+<script>
+    var map = L.map('map').setView([43.2567, 76.9286], 12); // Центр Алматы
+
+    // Добавление слоя карты
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Массив координат для маркеров
+    var markers = [
+        { lat: 43.2209552, lon: 76.9051127, label: "КЦДС Атакент" },
+    ];
+
+    // Добавление маркеров на карту
+    markers.forEach(function(marker) {
+        L.marker([marker.lat, marker.lon]).addTo(map)
+            .bindPopup("<b>" + marker.label + "</b>");
+    });
+</script>
 </body>
 
     <script>
@@ -125,5 +145,4 @@
         return cookieValue;
     }
 </script>
-
 </html>

@@ -1,5 +1,13 @@
 from django.shortcuts import render
 from django.db import connection
+from geopy.geocoders import Nominatim
+
+def get_coordinates(address):
+    geolocator = Nominatim(user_agent="map_app")
+    location = geolocator.geocode(address)
+    if location:
+        return location.latitude, location.longitude
+    return None
 
 def get_events_by_city(city=None):
     with connection.cursor() as cursor:

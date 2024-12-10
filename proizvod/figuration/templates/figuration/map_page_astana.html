@@ -7,6 +7,8 @@
     <title>Карта мероприятий в Астане</title>
     <link rel="stylesheet" href="{% static 'figuration/css/astana.css'%}">
     <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
     <header>
@@ -55,10 +57,28 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="map-container">
-                 <iframe width="900" height="500" src="https://www.openstreetmap.org/export/embed.html?bbox=71.08703587984246%2C51.02455319725838%2C71.58725713228387%2C51.20623810474524&amp;layer=mapnik" style="border: 2px solid white"></iframe>
-            </div>
+            <div class="map-container" id="map" style="width: 900px; height: 500px;"></div>
         </main>
+<script>
+    var map = L.map('map').setView([51.13364, 71.41620], 12);
+
+    // Добавление слоя карты
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Массив координат для маркеров
+    var markers = [
+        { lat: 51.091122, lon: 71.417416, label: "Astana IT University" },
+        { lat: 51.14636, lon: 71.345489, label: "West Hall" }
+    ];
+
+    // Добавление маркеров на карту
+    markers.forEach(function(marker) {
+        L.marker([marker.lat, marker.lon]).addTo(map)
+            .bindPopup("<b>" + marker.label + "</b>");
+    });
+</script>
 </body>
 
     <script>

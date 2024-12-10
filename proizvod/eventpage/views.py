@@ -90,7 +90,7 @@ def redirect_to_site(request, site, event_id):
 def search_event(request):
     search = request.POST.get('search')
     if not search:
-        return render(request, 'eventpage/search.html', {'error': 'Введите название мероприятия для поиска.'})
+        return redirect('main_page')
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
@@ -100,7 +100,7 @@ def search_event(request):
             row = cursor.fetchone()
     except Exception as e:
         print(f"Error! {e}")
-        return render(request, 'eventpage/search.html', {'error': 'Ошибка при выполнении поиска.'})
+        return redirect('main_page')
 
     if row is not None:
         event_id = row[0]
