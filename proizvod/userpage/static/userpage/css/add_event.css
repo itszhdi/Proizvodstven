@@ -62,7 +62,7 @@ body {
     display: flex;
     width: 100%;
     max-width: 1400px;
-    height: 80%;
+    height: 70%;
     background: rgba(134, 141, 212, 0.2);
     border: 2px solid white;
     border-radius: 15px;
@@ -126,7 +126,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   .right-section h1,h2,h3 {
@@ -143,8 +143,8 @@ body {
 .event-form input[type="file"],
 .event-form button {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 5px 0;
     border-radius: 10px;
     border: none;
     font-size: 1rem;

@@ -1,0 +1,315 @@
+@font-face {
+    font-family: 'Hagrid';
+    src: url('/static/regandaut/font/Hagrid-Regular-trial.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Candara';
+    src: url('/static/regandaut/font/Candara.ttf') format('truetype');
+  }
+
+  h1, h2 {
+    font-family: 'Hagrid';
+  }
+
+
+body {
+    font-family: 'Candara';
+    background:
+      url('/static/userpage/img/starrs.PNG') no-repeat center center,
+      linear-gradient(180deg, rgba(47, 52, 105, 0.9), rgba(134, 141, 212, 0.9));
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  margin-bottom: auto;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 9%;
+  left: 2.5%;
+}
+
+.back-arrow img {
+    width: 40px;
+    height: auto;
+    display: block;
+}
+
+.back-arrow:hover {
+    opacity: 0.7;
+  }
+
+
+/* настройка бокса поиска */
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(134, 141, 212, 0.9); /* Light purple */
+    border-radius: 20px; /* Rounded corners */
+    padding: 16px 30px;
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto; /* Center it horizontally */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Logo */
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+
+/* сама строка поиска  */
+.search-bar {
+    display: flex; /* Flexbox для размещения элементов */
+    align-items: center; /* Центрирование элементов по вертикали */
+    flex-grow: 1;
+    margin: 0 20px; /* Отступы вокруг строки поиска */
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 20px;
+    padding: 5px 10px; /* Внутренние отступы */
+    border: 1px solid white; /* Белая рамка */
+    box-shadow: none;
+    position: relative; /* Для позиционирования кнопки внутри */
+}
+
+
+.search-bar input {
+    flex-grow: 1; /* Поле ввода занимает всю ширину */
+    font-size: 1.4rem;
+    background-color: transparent;
+    font-family: 'Candara';
+    color: white;
+    border: none; /* Убираем стандартную рамку */
+    outline: none; /* Убираем обводку при фокусе */
+    padding: 5px 10px; /* Отступ внутри строки */
+    border-radius: 20px;
+}
+
+/* кнопка поиска */
+.search-bar button {
+    position: absolute; /* Абсолютное позиционирование */
+    right: 15px; /* Отступ от правого края контейнера */
+    top: 50%; /* Центрирование по вертикали */
+    transform: translateY(-50%); /* Коррекция смещения по вертикали */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* иконка кнопки поиска */
+.search-bar button img {
+    width: 30px; /* Размер иконки */
+    height: auto;
+}
+
+/* когда начинаешь вводить текст начинается ебала с тенью - убрала*/
+.search-bar input:focus {
+    outline: none; /* Убирает стандартную рамку браузера */
+    box-shadow: none; /* Убирает любые тени */
+}
+
+/* просто цвет строки */
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255); /* Lighter white for placeholder */
+    box-shadow: none;
+}
+
+/* комбобокс фото */
+  .location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .location img {
+    width: 20px;
+    height: auto;
+  }
+
+/* кнопка профиля */
+.profile button {
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    padding: 0; /* Убираем внутренние отступы */
+    margin: 0; /* Убираем внешние отступы */
+    cursor: pointer; /* Устанавливаем курсор в виде руки, чтобы кнопка оставалась кликабельной */
+}
+
+.profile button img {
+    width: 35px; /* Размер иконки */
+    height: auto;
+}
+
+/* сам комбобокс */
+    .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        text-align: center;
+    }
+    .city-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+    }
+    .city-select .dropdown li {
+        color: rgba(59, 67, 113, 0.9);
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .city-select .dropdown li:hover {
+        background-color: rgba(134, 141, 212, 0.9);
+        color: white;
+      }
+
+      .city-select {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255);
+        width: 20%; /* Фиксированная ширина в процентах */
+    }
+
+    .city-select button {
+        width: 100%; /* Кнопка растягивается по ширине родителя */
+        padding: 10px 20px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+    }
+
+    .city-select .dropdown {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%; /* Растягивается до ширины родителя */
+        display: none;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        text-align: center;
+    }
+
+    .city-select .icon {
+        width: 8%; /* Размер иконки в процентах от ширины родителя */
+        height: auto;
+    }
+
+
+  .city-select .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .city-select .dropdown li:hover {
+    background-color: rgba(134, 141, 212, 0.9);
+  }
+
+  .city-select:hover .dropdown {
+    display: block;
+}
+
+/* не ебу я что оно в конце стайла для поиска делает, но я не трогаю  */
+  .search-bar input {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px rgba(134, 141, 212, 0.9);
+    background: none;
+  }
+
+
+  .location {
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+
+/* Список билетов */
+.tickets-container {
+  width: 80%; /* Совпадает с шириной контейнера поиска */
+  max-width: 1200px;
+}
+
+.tickets-container p {
+ font-family: 'Candara';
+ font-size: 20px;
+}
+
+.tickets-container h2 {
+ font-size: 40px;
+}
+
+.ticket-title {
+ font-size: 30px;
+}
+
+.ticket-date {
+  font-style: italic;
+  margin-right: 20px;
+}
+
+.ticket {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: rgba(134, 141, 212, 1);
+  border-radius: 15px;
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: white;
+  text-align: left;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.ticket:hover {
+  background: rgba(47, 52, 105, 0.3);
+  transform: scale(1.02);
+}
+
+.ticket-button {
+  background-color: rgba(134, 141, 212, 0.9);
+  color: white;
+  border: 1px solid white;
+  font-family: 'Candara';
+  font-size: 24px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.ticket-button a {
+ border: none;
+ text-decoration: none;
+ color: white;
+ outline: none;
+}
+
+.ticket-button:hover {
+  background-color: rgba(47, 52, 105, 1);
+}

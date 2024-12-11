@@ -18,6 +18,9 @@ try:
             
              ALTER TABLE Customers
              ADD COLUMN user_name TEXT DEFAULT 'User';
+             
+             ALTER TABLE Customers
+             ADD CONSTRAINT chk_email CHECK (user_mail ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
             
              CREATE TABLE IF NOT EXISTS Organizers (
                 organizer_id SERIAL PRIMARY KEY,
@@ -52,12 +55,18 @@ try:
                 poster TEXT
             );
             
+            ALTER TABLE Events
+            ADD COLUMN people_amount INT;
+            
             CREATE TABLE IF NOT EXISTS Tickets (
                 ticket_id SERIAL PRIMARY KEY,
                 event_id INT NOT NULL REFERENCES Events(event_id),
                 user_id INT REFERENCES Customers(user_id),
                 price INT NOT NULL
             );
+            
+            ALTER TABLE Tickets
+            ADD CONSTRAINT chk_price CHECK (price >= 0);
             
             INSERT INTO Categories(category)
             VALUES ('ЧТО ГДЕ КОГДА'),
@@ -73,16 +82,16 @@ try:
                    ('Aitu Live');
             
             
-            INSERT INTO Events(event_name, event_date, description, category_id, organizer_id, city, time, address, photo_path)
-            VALUES  ('Acoustic night', '19-04-2024', 'AITU Music Club invites you to a unique celebration of love and romance! Every year, on April 15th, Kazakhstan celebrates the magnificent holiday - Lovers` Day, inspired by the wonderful Kazakh legend of love «Kozy-Korpesh - Bayan-Sulu»', 2, 2, 'Astana', '18:00', 'Open Space', '1AN.png'),
-                    ('Miss & Mister AITU', '03-05-2024', 'Already on May 3, we will find out who will receive the title of Miss&Mister AITU at an exciting gala concert, where you are expected: Raffle of the merch and unique prizes from sponsors! (For more information, follow our stories)', 5, 3, 'Astana', '16:00', 'Assembly Hall','2MAMA.png'),
-                    ('Финал осенней серии', '19-10-2024', 'After intense intellectual battles, the teams came to a decisive meeting, where every correct answer can be decisive!', 1, 1, 'Astana', '16:00', 'AITU - C1.1.334L','3WWW.png'),
-                    ('AITU Commencement Party', '11-08-2024', 'We are thrilled to invite you to AITU Commencement Party! It`s time to officially join our family and meet new friendse.', 4, 4, 'Astana', '16:00', 'West Hall','4ACP.png'),
+            INSERT INTO Events(event_name, event_date, description, category_id, organizer_id, city, time, address, photo_path, people_amount)
+            VALUES  ('Acoustic night', '19-04-2024', 'AITU Music Club invites you to a unique celebration of love and romance! Every year, on April 15th, Kazakhstan celebrates the magnificent holiday - Lovers` Day, inspired by the wonderful Kazakh legend of love «Kozy-Korpesh - Bayan-Sulu»', 2, 2, 'Astana', '18:00', 'Open Space', '1AN.png',200),
+                    ('Miss & Mister AITU', '03-05-2024', 'Already on May 3, we will find out who will receive the title of Miss&Mister AITU at an exciting gala concert, where you are expected: Raffle of the merch and unique prizes from sponsors! (For more information, follow our stories)', 5, 3, 'Astana', '16:00', 'Assembly Hall','2MAMA.png',150),
+                    ('Финал осенней серии', '19-10-2024', 'After intense intellectual battles, the teams came to a decisive meeting, where every correct answer can be decisive!', 1, 1, 'Astana', '16:00', 'AITU - C1.1.334L','3WWW.png',24),
+                    ('AITU Commencement Party', '11-08-2024', 'We are thrilled to invite you to AITU Commencement Party! It`s time to officially join our family and meet new friendse.', 4, 4, 'Astana', '16:00', 'West Hall','4ACP.png',1000),
                     ('Club fair', '18-09-2024', 'AITU has a huge number of clubs. We know that freshmen can`t wait to learn more about each one and already start taking part in student life', 3, 3, 'Astana', '14:00', 'Assembly Hall','5CF.png'),
-                    ('Отчетный концерт "Eurasia Band"', '22-11-2024', 'We invite Friends from AITU to attend the Eurasia Band reporting concert. Unforgettable impressions and a warm welcome await you!', 2,2, 'Astana', '17:00', 'КЦДС Атакент','6CEB.png'),
-                    ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire". Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png'),
-                    ('Music Spooktacular', '31-10-2024', 'Through the fog of an October night, when the world of the living and the dead almost touch, we invite you to the “Music Spooktacular”', 2,2, 'Astana', '17:00', 'Assembly Hall','8MS.png'),
-                    ('IT FEST 2024','06-12-2024','Conquer the world of technology at ITFest 2024! You are ambitious, striving for new knowledge and want to bring your ideas to life, and ITFest is exactly the place where you can start your path to success!',4,3,'Almaty','9:00','КЦДС Атамекен','ITF9.png');
+                    ('Отчетный концерт "Eurasia Band"', '22-11-2024', 'We invite Friends from AITU to attend the Eurasia Band reporting concert. Unforgettable impressions and a warm welcome await you!', 2,2, 'Astana', '17:00', 'КЦДС Атакент','6CEB.png',500),
+                    ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire". Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png',300),
+                    ('Music Spooktacular', '31-10-2024', 'Through the fog of an October night, when the world of the living and the dead almost touch, we invite you to the “Music Spooktacular”', 2,2, 'Astana', '17:00', 'Assembly Hall','8MS.png',300),
+                    ('IT FEST 2024','06-12-2024','Conquer the world of technology at ITFest 2024! You are ambitious, striving for new knowledge and want to bring your ideas to life, and ITFest is exactly the place where you can start your path to success!',4,3,'Almaty','9:00','КЦДС Атамекен','ITF9.png',5000);
                     
             
             INSERT INTO Tickets(event_id,price)
@@ -143,23 +152,26 @@ try:
                 LEFT JOIN Categories USING (category_id)
                 LEFT JOIN Organizers USING (organizer_id)
                 LEFT JOIN Tickets USING (event_id);
+            
                 
-                
-                CREATE OR REPLACE FUNCTION validate_email()
+                CREATE OR REPLACE FUNCTION decrease_people_amount()
                 RETURNS TRIGGER AS $$
                 BEGIN
-                    IF NEW.user_mail !~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-                        RAISE EXCEPTION 'Invalid email: %', NEW.user_mail;
+                    UPDATE Events
+                    SET people_amount = people_amount - 1
+                    WHERE event_id = NEW.event_id;
+                    IF (SELECT people_amount FROM Events WHERE event_id = NEW.event_id) < 0 THEN
+                        RAISE EXCEPTION 'No more seats available for event %', NEW.event_id;
                     END IF;
+                
                     RETURN NEW;
                 END;
                 $$ LANGUAGE plpgsql;
                 
-                
-                CREATE TRIGGER email_validation_trigger
-                BEFORE INSERT OR UPDATE ON Customers
+                CREATE TRIGGER decrease_seats_trigger
+                AFTER INSERT OR UPDATE ON Tickets
                 FOR EACH ROW
-                EXECUTE FUNCTION validate_email();
+                EXECUTE FUNCTION decrease_people_amount();
             """)
             print("ok")
 except psycopg2.Error as e:

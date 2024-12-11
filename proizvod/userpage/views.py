@@ -7,7 +7,6 @@ from django.core.files.storage import default_storage
 from regandaut.views import check_user_password
 import os
 
-
 # Функция проверки текущего пароля (проверка для изменения данных)
 def check_current_password(request,password):
     user_id = request.session.get('user_id')
@@ -254,6 +253,7 @@ def add_event(request):
         time = request.POST.get('time')
         photo_path = request.FILES.get('photo_path')
         price = request.POST.get('price')
+        people_amount = request.POST.get('people_amount')
 
         photo_folder = os.path.join(settings.MEDIA_ROOT, 'eventpage', 'img')
         os.makedirs(photo_folder, exist_ok=True)
@@ -312,10 +312,10 @@ def add_event(request):
         try:
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO Events (event_name, description, organizer_id, category_id, city, address, event_date, time, photo_path)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    INSERT INTO Events (event_name, description, organizer_id, category_id, city, address, event_date, time, photo_path, people_amount)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     RETURNING event_id;
-                """, [event_name, description, organizer_id, category_id, city, address, event_date, time, photo_url])
+                """, [event_name, description, organizer_id, category_id, city, address, event_date, time, photo_url, people_amount])
 
                 event_id = cursor.fetchone()[0]
 
@@ -327,6 +327,33 @@ def add_event(request):
         except Exception as e:
             print(f"Ошибка при добавлении события: {e}")
             messages.error(request, "Не удалось сохранить событие.")
+            if "cannot be in the past" in str(e):  # Проверка текста исключения
+                messages.error(request, "Дата мероприятия не может быть в прошлом.")
 
     return render(request, 'userpage/add_event.html')
+
+# отображение всех билетов пользователя
+def show_list(request):
+    user_id = request.session.get('user_id')
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT ticket_id, price, event_name, event_date 
+                FROM Tickets
+                LEFT JOIN Events USING(event_id)
+                WHERE user_id = %s
+                """,
+                [user_id])
+            tickets = cursor.fetchall()
+            tickets = [
+                {'ticket_id': row[0], 'price': 'Free' if int(row[1]) == 0 else row[1], 'event_name': row[2], 'event_date': row[3]}
+                for row in tickets]
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+        tickets = []
+    return render(request, 'userpage\\ticketslist.html', {'tickets': tickets})
+
+
+
 

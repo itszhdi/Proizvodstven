@@ -12,8 +12,8 @@
 <body>
   <header>
               <a href="/" class="back-arrow">
-      <img src="/static/eventpage/img/arrow.png" alt="<--">
-    </a>
+                <img src="/static/eventpage/img/arrow.png" alt="<--">
+            </a>
             <div class="search-box">
                 <div class="logo">
                   <a href="/">
@@ -117,6 +117,11 @@
         </div>
         <div class="overlay" id="overlay"></div>
     </div>
+        <script>
+    document.getElementById("close-modal").addEventListener("click", function () {
+        document.getElementById("wind").style.display = "none";
+    });
+    </script>
 
         <!-- Второе модальное окно -->
      <div id="second-modal" class="modal">
@@ -170,14 +175,34 @@
                 </div>
                 <div class="payment-options">
                     <p><b>В приложении:</b></p>
-                <div class="logos">
-                    <a href="/redirect/kaspi/{{ event.id }}/">
-                        <img src="/static/eventpage/img/kaspi.png" alt="Kaspi.kz">
-                    </a>
-                    <a href="/redirect/qiwi/{{ event.id }}/">
-                        <img src="/static/eventpage/img/qiwi.png" alt="QIWI">
-                    </a>
-                </div>
+                        <script>
+                            function handlePayment(site, eventId) {
+                                fetch(`/redirect/${site}/${eventId}/`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.error) {
+                                            alert(data.error);
+                                        } else {
+                                            // Открываем внешний сайт в новой вкладке
+                                            window.open(data.external_url, '_blank');
+                                            // Перенаправляем текущую страницу на страницу билета
+                                            window.location.href = data.ticket_url;
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('Произошла ошибка. Попробуйте снова.');
+                                    });
+                            }
+                        </script>
+                        <div class="logos">
+                            <a href="javascript:void(0);" onclick="handlePayment('kaspi', {{ event.id }})">
+                                <img src="/static/eventpage/img/kaspi.png" alt="Kaspi.kz">
+                            </a>
+                            <a href="javascript:void(0);" onclick="handlePayment('qiwi', {{ event.id }})">
+                                <img src="/static/eventpage/img/qiwi.png" alt="QIWI">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -304,5 +329,34 @@
         return charCode >= 48 && charCode <= 57; // Только цифры (0-9)
     }
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const buyButton = document.getElementById("open-modal")
+    buyButton.addEventListener("click", function () {
+        // Отправляем запрос на сервер для проверки авторизации
+        fetch("{% url 'check_auth' %}", {
+            method: "GET",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"  // Добавляем CSRF-токен для безопасности
+            }
+        })
+        .then(response => {
+            if (response.status === 401) {
+                // Если пользователь не авторизован, перенаправляем на страницу авторизации
+                window.location.href = "{% url 'authorize' %}";
+            } else {
+                // Если пользователь авторизован, выполняем действие (например, открываем модальное окно)
+                const modal = document.getElementById("wind");
+                modal.style.display = "flex";
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка проверки авторизации:", error);
+        });
+    });
+});
+</script>
+
 </body>
 </html>

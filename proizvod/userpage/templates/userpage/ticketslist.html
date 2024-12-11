@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои билеты</title>
+    <link rel="stylesheet" href="{% static 'userpage/css/ticketlist.css' %}">
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/046/805/074/small/white-star-blink-free-png.png">
+</head>
+<body>
+    <a href="{% url 'user' %}" class="back-arrow">
+          <img src="/static/eventpage/img/arrow.png" alt="<--">
+    </a>
+    <div class="main-container">
+            <div class="search-box">
+                <div class="logo">
+                  <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                </div>
+                <div class="search-bar">
+                 <form method="POST" action="{% url 'search' %}">
+                        {% csrf_token %}
+                    <input type="text" name="search" placeholder="Поиск" value="{{ request.GET.search }}">
+                    <button type="submit">
+                        <img src="/static/eventpage/img/поиск лого.PNG" alt="Search">
+                    </button>
+                 </form>
+            </div>
+                <div class="city-select">
+                    <img src="/static/mainpage/img/location.PNG" alt="Город" class="icon">
+                    <span class="city-text">{{ city|default:"Город" }}</span>
+                    <ul class="dropdown">
+                        <li>Астана</li>
+                        <li>Алматы</li>
+                    </ul>
+                </div>
+
+                <div class="profile">
+                    <button onclick="window.location.href='/user/'">
+                        <img src="/static/eventpage/img/profile.PNG" alt="Profile">
+                    </button>
+                </div>
+              </div>
+    <div class="tickets-container">
+            <h2>Мои билеты:</h2>
+            {% if tickets %}
+                {% for ticket in tickets %}
+                    <div class="ticket">
+                            <span class="ticket-title"><b>{{ ticket.event_name }}</b></span>
+                            <div class="ticket-date">Дата: {{ ticket.event_date }}</div>
+                            <div class="ticket-date">Цена: {{ ticket.price }}</div>
+                        <button type="submit" class="ticket-button">
+                            <a href="{% url 'buy' ticket_id=ticket.ticket_id %}">Перейти к билету</a>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>У вас нет купленных билетов</p>
+            {% endif %}
+    </div>
+    </div>
+</body>
+<script>
+    function handleClick(eventName) {
+    alert(`Вы выбрали билет на: ${eventName}`);
+}
+</script>
+
+<script>
+    // Получаем элементы
+    const citySelect = document.querySelector('.city-select');
+    const cityText = document.querySelector('.city-text');
+    const dropdown = document.querySelector('.dropdown');
+    const cityItems = dropdown.querySelectorAll('li');
+
+    // При клике на город, открываем или закрываем выпадающий список
+    citySelect.addEventListener('click', function() {
+        dropdown.classList.toggle('active');
+    });
+
+    // Обработчик клика по элементам списка
+    cityItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            // Изменяем текст в <span class="city-text">
+            cityText.textContent = item.textContent;
+
+            // Закрываем список после выбора города
+            dropdown.classList.remove('active');
+
+            // Отправляем AJAX-запрос на сервер для сохранения города в сессии
+            fetch('/set_city/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') // Получаем CSRF токен для безопасности
+                },
+                body: JSON.stringify({
+                    city: item.textContent // Отправляем выбранный город
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Можно обработать успешный ответ от сервера, если нужно
+                console.log('Город успешно сохранен');
+            })
+            .catch(error => console.error('Ошибка при отправке города:', error));
+        });
+    });
+
+    // Закрыть выпадающий список, если клик вне его
+    document.addEventListener('click', function(event) {
+        if (!citySelect.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Функция для получения CSRF токена (для отправки безопасных запросов в Django)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+</html>

@@ -106,6 +106,7 @@ h2 {
 }
 
 .action-button {
+  font-family: 'Candara';
   padding: 20px;
   border: 1.4px solid white;
   border-radius: 20px;
@@ -125,6 +126,18 @@ h2 {
 
 #add {
   background: #2F3469;
+  opacity: 1;
+  padding: 23px;
+  border: 1.5px solid white;
+  margin-left: 10px;
+}
+
+#ticketslist {
+  opacity: 1;
+  padding: 23px;
+  border: 1.5px solid white;
+  margin-left: 10px;
+
 }
 
 .logout-button,
@@ -342,7 +355,7 @@ input:focus {
 
 #third-wind h2{
  font-size: 32px;
- left: 28%;
+ left: 32%;
 }
 
 #third-wind .delete-acc {
