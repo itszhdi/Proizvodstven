@@ -15,12 +15,14 @@
     <div class="main-container">
             <div class="search-box">
                 <div class="logo">
-                  <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                  <a href="/">
+                    <img src="/static/mainpage/img/logo_main.PNG" alt="TicketSpace Logo">
+                  </a>
                 </div>
                 <div class="search-bar">
-                 <form method="POST" action="{% url 'search' %}">
+                 <form method="POST" action="{% url 'ticket_search' %}">
                         {% csrf_token %}
-                    <input type="text" name="search" placeholder="Поиск" value="{{ request.GET.search }}">
+                    <input type="text" name="ticket_search" placeholder="Поиск" value="{{ request.POST.ticket_search }}">
                     <button type="submit">
                         <img src="/static/eventpage/img/поиск лого.PNG" alt="Search">
                     </button>
@@ -55,17 +57,13 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p>У вас нет купленных билетов</p>
+                <a href="{% url 'main_page' %}">
+                  <p>Нет билетов!</p>
+            </a>
             {% endif %}
     </div>
     </div>
 </body>
-<script>
-    function handleClick(eventName) {
-    alert(`Вы выбрали билет на: ${eventName}`);
-}
-</script>
-
 <script>
     // Получаем элементы
     const citySelect = document.querySelector('.city-select');

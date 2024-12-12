@@ -5,6 +5,7 @@ from django.db import connection
 from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
+import pyqrcode
 
 
 # проверка авторизации пользователя (для ограничения отображения окон)
@@ -71,11 +72,12 @@ def buy_ticket(request, ticket_id):
     try:
         with connection.cursor() as cursor:
             cursor.execute(
-                """SELECT ticket_id, address, event_name, event_date, time
-                FROM Tickets 
-                INNER JOIN Events USING(event_id)
-                WHERE ticket_id = %s""",
-                [ticket_id]
+                """SELECT ticket_id, address, event_name, event_date, time, category
+                    FROM Tickets 
+                    INNER JOIN Events ON Tickets.event_id = Events.event_id
+                    INNER JOIN Categories ON Events.category_id = Categories.category_id
+                    WHERE ticket_id = %s""",
+                    [ticket_id]
             )
             ticket = cursor.fetchone()
 
@@ -88,7 +90,8 @@ def buy_ticket(request, ticket_id):
                 'place': ticket[1],
                 'event_name': ticket[2],
                 'event_date': ticket[3],
-                'time': ticket[4]
+                'time': ticket[4],
+                'category': ticket[5]
             }
     except Exception as e:
         print(f"Произошла ошибка: {str(e)}")
@@ -188,5 +191,34 @@ def process_order(request, event_id):
             ticket_id = get_or_create_ticket(event_id, user_id)
             return redirect('buy', ticket_id=ticket_id)
         except Exception as e:
-            messages.error(request, f"Произошла ошибка: {str(e)}")
+            print(f"Произошла ошибка: {str(e)}")
             return redirect('event', event_id=event_id)
+
+
+
+# === Много функций для генерирования QR кода на билетах ===
+
+# Генерация
+def generate_qr_code_from_sql(query_result, file_path):
+    qr = pyqrcode.create(query_result)
+    qr.png(file_path, scale=6)
+    return file_path
+
+
+def get_query_result(request):
+    user_id = request.session.get('user_id')
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """SELECT user_id, user_mail, event_name, ticket_id, price 
+            FROM Tickets 
+            JOIN Customers USING (user_id)
+            JOIN Events USING (event_id)
+            WHERE user_id = %s""",
+            [user_id]
+        )
+        query_result = cursor.fetchone()[0]
+
+        qr_file_path = "/static/eventpage/img/generated_qr.png"
+        generate_qr_code_from_sql(query_result, qr_file_path)
+
+

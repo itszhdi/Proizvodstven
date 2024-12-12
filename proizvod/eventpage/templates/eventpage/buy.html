@@ -22,10 +22,17 @@
     <div class="ticket">
         <div class="ticket-right">
             <div class="ticket-image">
+                {% if ticket.category == 'Music event' %}
                 <img src="/static/eventpage/img/music.png" alt="Ticket Image">
-            </div>
-            <div class="ticket-logo">
-                <img src="/static/eventpage/img/logo.png" alt="TicketSpace Logo">
+                {% elif ticket.category == 'Competition' %}
+                <img src="/static/eventpage/img/competition.png" alt="Ticket Image">
+                {% elif ticket.category == 'ЧТО ГДЕ КОГДА' %}
+                <img src="/static/eventpage/img/mind.png" alt="Ticket Image">
+                {% elif ticket.category == 'AITUSA event' %}
+                <img src="/static/eventpage/img/AITUSA.png" alt="Ticket Image">
+                {% else %}
+                <img src="/static/eventpage/img/party.png" alt="Ticket Image">
+                {% endif %}
             </div>
             <div class="ticket-university">
                 <img src="/static/eventpage/img/AITU.png" alt="Astana University Logo">

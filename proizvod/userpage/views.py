@@ -355,5 +355,25 @@ def show_list(request):
     return render(request, 'userpage\\ticketslist.html', {'tickets': tickets})
 
 
-
+# поиск по билетам
+def ticket_search(request):
+    ticket_search = request.POST.get('ticket_search')
+    user_id = request.session.get('user_id')
+    if not ticket_search:
+        return redirect('mytickets')
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT ticket_id, price, event_name, event_date FROM Tickets
+                LEFT JOIN Events USING(event_id)
+                WHERE event_name ILIKE %s and user_id = %s;
+            """, [f"%{ticket_search}%", user_id])
+            tickets = cursor.fetchall()
+            tickets = [
+                {'ticket_id': row[0], 'price': 'Free' if int(row[1]) == 0 else row[1], 'event_name': row[2],
+                 'event_date': row[3]}
+                for row in tickets]
+    except Exception:
+        tickets = []
+    return render(request, 'userpage\\ticketslist.html', {'tickets': tickets})
 

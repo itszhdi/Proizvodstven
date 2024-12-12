@@ -67,6 +67,16 @@ try:
             
             ALTER TABLE Tickets
             ADD CONSTRAINT chk_price CHECK (price >= 0);
+                        
+            ALTER TABLE Events
+            ADD CONSTRAINT unique_event_id UNIQUE (event_id);
+            
+            ALTER TABLE Tickets
+            ADD CONSTRAINT unique_ticket_id UNIQUE (ticket_id);
+            
+            CREATE INDEX find_category_name ON Categories (LOWER(category));
+            
+            CREATE INDEX find_organizer_name ON Organizers (LOWER(name));
             
             INSERT INTO Categories(category)
             VALUES ('ЧТО ГДЕ КОГДА'),

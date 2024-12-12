@@ -23,7 +23,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .main-container {
@@ -252,6 +252,11 @@ body {
 .tickets-container {
   width: 80%; /* Совпадает с шириной контейнера поиска */
   max-width: 1200px;
+}
+
+.tickets-container a {
+ text-decoration: none;
+ color: white;
 }
 
 .tickets-container p {
