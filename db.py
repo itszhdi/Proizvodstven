@@ -147,7 +147,8 @@ try:
                 timer(event_id) AS timer,
                 event_id,
                 city,
-                ticket_id
+                ticket_id,
+                people_amount
                 FROM Events
                 LEFT JOIN Categories USING (category_id)
                 LEFT JOIN Organizers USING (organizer_id)

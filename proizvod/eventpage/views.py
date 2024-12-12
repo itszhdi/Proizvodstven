@@ -14,6 +14,7 @@ def check_auth(request):
         return JsonResponse({'error': 'Unauthorized'}, status=401)
     return JsonResponse({'status': 'Authorized'}, status=200)
 
+
 # получение всей информации о мероприятии
 def get_event_data(event_id):
     try:
@@ -37,9 +38,10 @@ def get_event_data(event_id):
                     'timer': row[9],
                     'id': row[10],
                     'current': row[11],
-                    'ticket_id': row[12]
+                    'ticket_id': row[12],
+                    'people_amount': row[13]
                 }
-                if row[9] == '0':
+                if row[9] == '0' or row[13] == '0':
                     event_data['timer'] = 'SOLD OUT!'
 
                 return event_data
@@ -63,13 +65,6 @@ def open_event_page(request, event_id):
     city = get_city(request)
     return render(request, 'eventpage/event.html',
                   {'event': event_data, 'city': city})
-
-
-
-EXTERNAL_SITES = {
-    'kaspi': 'https://kaspi.kz/',
-    'qiwi': 'https://qiwi.com/',
-}
 
 # отображение билета со всеми данными
 def buy_ticket(request, ticket_id):
@@ -101,6 +96,39 @@ def buy_ticket(request, ticket_id):
 
     return render(request, 'eventpage/buy.html', {'ticket': event_data})
 
+
+# функция для создания билета
+def get_or_create_ticket(event_id, user_id):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT ticket_id, price FROM Tickets WHERE event_id = %s AND user_id IS NOT NULL",
+            [event_id]
+        )
+        existing_ticket = cursor.fetchone()
+
+        if existing_ticket:
+            price = existing_ticket[1]
+            cursor.execute(
+                "INSERT INTO tickets (event_id, user_id, price) VALUES (%s, %s, %s)",
+                [event_id, user_id, price]
+            )
+            return cursor.lastrowid
+        else:
+            cursor.execute(
+                "UPDATE tickets SET user_id = %s WHERE event_id = %s AND user_id IS NULL",
+                [user_id, event_id]
+            )
+            cursor.execute(
+                "SELECT ticket_id FROM tickets WHERE event_id = %s AND user_id = %s",
+                [event_id, user_id]
+            )
+            return cursor.fetchone()[0]
+
+
+EXTERNAL_SITES = {
+    'kaspi': 'https://kaspi.kz/',
+    'qiwi': 'https://qiwi.com/',
+}
 # перенаправление на сайты в случае оплаты через каспи и киви
 def redirect_to_site(request, site, event_id):
     event_data = get_event_data(event_id)
@@ -112,24 +140,7 @@ def redirect_to_site(request, site, event_id):
 
     user_id = request.session.get('user_id')
     try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                INSERT INTO Tickets (event_id, user_id, price)
-                VALUES (%s, %s, %s)
-                """,
-                [event_id, user_id, event_data['price']]
-            )
-
-            cursor.execute(
-                """
-                SELECT ticket_id FROM Tickets
-                WHERE event_id = %s AND user_id = %s
-                """,
-                [event_id, user_id]
-            )
-            ticket_id = cursor.fetchone()[0]
-
+        ticket_id = get_or_create_ticket(event_id, user_id)
     except Exception as e:
         print(f"Database error: {e}")
         return JsonResponse({'error': 'Database error'}, status=500)
@@ -173,30 +184,9 @@ def search_event(request):
 def process_order(request, event_id):
     if request.method == "POST":
         user_id = request.session.get('user_id')
-        print(user_id)
         try:
-            with connection.cursor() as cursor:
-                # Проверяем, существует ли запись с ненулевым user_id
-                cursor.execute(
-                    "SELECT ticket_id, price FROM Tickets WHERE event_id = %s AND user_id IS NOT NULL",
-                    [event_id]
-                )
-                existing_ticket = cursor.fetchone()
-
-                if existing_ticket:
-                    price = existing_ticket[1]
-                    cursor.execute(
-                        "INSERT INTO tickets (event_id, user_id, price) VALUES (%s, %s, %s)",
-                        [event_id, user_id, price]
-                    )
-                    new_ticket_id = cursor.lastrowid
-                else:
-                    cursor.execute(
-                        "UPDATE tickets SET user_id = %s WHERE event_id = %s AND user_id IS NULL",
-                        [user_id, event_id]
-                    )
-            messages.success(request, "Билет успешно оформлен!")
-            return redirect('buy', ticket_id = existing_ticket[0] if existing_ticket else new_ticket_id)
+            ticket_id = get_or_create_ticket(event_id, user_id)
+            return redirect('buy', ticket_id=ticket_id)
         except Exception as e:
             messages.error(request, f"Произошла ошибка: {str(e)}")
             return redirect('event', event_id=event_id)

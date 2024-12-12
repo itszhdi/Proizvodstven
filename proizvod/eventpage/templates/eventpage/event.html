@@ -105,7 +105,7 @@
                         <div class="timer">{{ event.timer }}</div>
                     </div>
                     <div class="details">
-                        <p><strong>Цена:</strong> {{ event.price }}</p>
+                        <p><strong>Цена:</strong> <span id="ticket-price" data-event-id="{{ event.id }}">{{ event.price }}</span></p>
                         <p><strong>Дата:</strong> {{ event.date }}</p>
                         <p><strong>Время:</strong> {{ event.time }}</p>
                     </div>
@@ -212,6 +212,7 @@
   {% endif %}
 
     <script>
+       document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('wind');
         const secondModal = document.getElementById('second-modal');
         const openModalButton = document.getElementById('open-modal');
@@ -222,15 +223,48 @@
         const closeSecondModalButton = document.getElementById('close-second-modal');
         const secondOverlay = document.getElementById('second-overlay');
 
-        // Функции для первого модального окна
+        const ticketPriceElement = document.getElementById('ticket-price'); // Элемент с ценой
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Получение CSRF токена
+
+        const processFreeTicket = (eventId) => {
+            fetch(`/process_order/${eventId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                }
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url; // Перенаправляем пользователя
+                } else if (response.ok) {
+                    alert('Бесплатный билет успешно оформлен!');
+                } else {
+                    alert('Ошибка при оформлении бесплатного билета.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        // Функция для первого модального окна
         const openModal = () => modal.classList.add('show');
         const closeModal = () => modal.classList.remove('show');
 
-        // Функции для второго модального окна
+        // Функция для второго модального окна
         const openSecondModal = () => {
-            modal.classList.remove('show'); // Закрываем первое окно
-            secondModal.classList.add('show'); // Открываем второе окно
+            const price = ticketPriceElement.textContent.trim(); // Получаем текст цены и удаляем пробелы
+            const eventId = ticketPriceElement.getAttribute('data-event-id'); // Получаем ID события из data-атрибута
+
+            // Проверяем, бесплатный ли билет
+            if (price === 'Free' || price === '0') {
+                processFreeTicket(eventId); // Оформляем бесплатный билет
+                return; // Прерываем выполнение, чтобы не открывать окно оплаты
+            }
+
+            modal.classList.remove('show'); // Закрываем первое модальное окно
+            secondModal.classList.add('show'); // Открываем второе модальное окно
         };
+
         const closeSecondModal = () => secondModal.classList.remove('show');
 
         openModalButton.addEventListener('click', openModal);
@@ -240,7 +274,7 @@
         openSecondModalButton.addEventListener('click', openSecondModal);
         closeSecondModalButton.addEventListener('click', closeSecondModal);
         secondOverlay.addEventListener('click', closeSecondModal);
-
+    });
     </script>
 
     <script>
