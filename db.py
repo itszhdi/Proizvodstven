@@ -119,7 +119,7 @@ try:
             CREATE OR REPLACE FUNCTION timer(event int) 
             RETURNS TEXT AS $$
             DECLARE
-                base_date TIMESTAMP := '2024-08-31 14:14:35';
+                base_date TIMESTAMP := 'CURRENT_TIMESTAMP;
                 events_date TIMESTAMP;
                 time_diff INTERVAL;
             BEGIN
@@ -165,24 +165,30 @@ try:
                 LEFT JOIN Tickets USING (event_id);
             
                 
-                CREATE OR REPLACE FUNCTION decrease_people_amount()
-                RETURNS TRIGGER AS $$
+                CREATE OR REPLACE FUNCTION timer(event INT) 
+                RETURNS TEXT AS $$
+                DECLARE
+                    base_date TIMESTAMP := CURRENT_TIMESTAMP;
+                    events_date TIMESTAMP;
+                    time_diff INTERVAL;
                 BEGIN
-                    UPDATE Events
-                    SET people_amount = people_amount - 1
-                    WHERE event_id = NEW.event_id;
-                    IF (SELECT people_amount FROM Events WHERE event_id = NEW.event_id) < 0 THEN
-                        RAISE EXCEPTION 'No more seats available for event %', NEW.event_id;
+                    SELECT event_date 
+                    INTO events_date
+                    FROM Events
+                    WHERE event_id = event;
+                    IF events_date IS NULL THEN
+                        RAISE EXCEPTION 'No event_date found in Events table';
                     END IF;
-                
-                    RETURN NEW;
+                    time_diff := events_date - base_date;
+                    RETURN 
+                        CONCAT(
+                            EXTRACT(DAY FROM time_diff), ' дней ',
+                            LPAD(EXTRACT(HOUR FROM time_diff)::TEXT, 2, '0'), ':',
+                            LPAD(EXTRACT(MINUTE FROM time_diff)::TEXT, 2, '0'), ':',
+                            LPAD(EXTRACT(SECOND FROM time_diff)::TEXT, 2, '0')
+                        );
                 END;
                 $$ LANGUAGE plpgsql;
-                
-                CREATE TRIGGER decrease_seats_trigger
-                AFTER INSERT OR UPDATE ON Tickets
-                FOR EACH ROW
-                EXECUTE FUNCTION decrease_people_amount();
             """)
             print("ok")
 except psycopg2.Error as e:

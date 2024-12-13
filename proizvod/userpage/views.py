@@ -231,12 +231,10 @@ def user_status(user_id):
         return False
 
 
-
 def logout_user(request):
     # Завершает текущую сессию
     request.session.flush()
     return redirect('authorize')
-
 
 
 # Добавление мероприятия через окно организатора
@@ -262,12 +260,10 @@ def add_event(request):
             photo_filename = f"{event_name.replace(' ', '_')}_{photo_path.name}"
             photo_full_path = os.path.join(photo_folder, photo_filename)
 
-            # Записываем файл в папку
+            # Запись файла в папку
             with default_storage.open(photo_full_path, 'wb+') as destination:
                 for chunk in photo_path.chunks():
                     destination.write(chunk)
-
-            # Сохраняем путь к файлу в базе данных
             photo_url = photo_filename
         else:
             photo_url = None
@@ -327,7 +323,7 @@ def add_event(request):
         except Exception as e:
             print(f"Ошибка при добавлении события: {e}")
             messages.error(request, "Не удалось сохранить событие.")
-            if "cannot be in the past" in str(e):  # Проверка текста исключения
+            if "cannot be in the past" in str(e):
                 messages.error(request, "Дата мероприятия не может быть в прошлом.")
 
     return render(request, 'userpage/add_event.html')

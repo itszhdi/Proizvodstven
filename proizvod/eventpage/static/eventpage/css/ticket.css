@@ -76,8 +76,9 @@ body::before {
 
 .ticket-info {
     position: absolute;
+    margin-top: 1%;
     left: 48%;
-    top: 24%;
+    top: 20%;
     text-align: left;
 
 }
@@ -106,7 +107,7 @@ p {
 .ticket-details {
     position: absolute;
     left: 31%;
-    top: 60%;
+    top: 62%;
     text-align: center;
 }
 

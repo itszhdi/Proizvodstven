@@ -5,8 +5,10 @@ from django.db import connection
 from django.urls import reverse
 from django.http import Http404
 from django.http import JsonResponse
-import pyqrcode
-
+import qrcode
+from django.conf import settings
+import os
+from PIL import Image
 
 # проверка авторизации пользователя (для ограничения отображения окон)
 def check_auth(request):
@@ -42,7 +44,7 @@ def get_event_data(event_id):
                     'ticket_id': row[12],
                     'people_amount': row[13]
                 }
-                if row[9] == '0' or row[13] == '0':
+                if row[9] <= '0' or row[13] == '0':
                     event_data['timer'] = 'SOLD OUT!'
 
                 return event_data
@@ -67,38 +69,6 @@ def open_event_page(request, event_id):
     return render(request, 'eventpage/event.html',
                   {'event': event_data, 'city': city})
 
-# отображение билета со всеми данными
-def buy_ticket(request, ticket_id):
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """SELECT ticket_id, address, event_name, event_date, time, category
-                    FROM Tickets 
-                    INNER JOIN Events ON Tickets.event_id = Events.event_id
-                    INNER JOIN Categories ON Events.category_id = Categories.category_id
-                    WHERE ticket_id = %s""",
-                    [ticket_id]
-            )
-            ticket = cursor.fetchone()
-
-            if not ticket:
-                print("Билет не найден в бд")
-                return redirect('mytickets')
-
-            event_data = {
-                'ticket_id': ticket[0],
-                'place': ticket[1],
-                'event_name': ticket[2],
-                'event_date': ticket[3],
-                'time': ticket[4],
-                'category': ticket[5]
-            }
-    except Exception as e:
-        print(f"Произошла ошибка: {str(e)}")
-        return redirect('mytickets')
-
-    return render(request, 'eventpage/buy.html', {'ticket': event_data})
-
 
 # функция для создания билета
 def get_or_create_ticket(event_id, user_id):
@@ -112,20 +82,20 @@ def get_or_create_ticket(event_id, user_id):
         if existing_ticket:
             price = existing_ticket[1]
             cursor.execute(
-                "INSERT INTO tickets (event_id, user_id, price) VALUES (%s, %s, %s)",
+                "INSERT INTO tickets (event_id, user_id, price) VALUES (%s, %s, %s) RETURNING ticket_id",
                 [event_id, user_id, price]
             )
-            return cursor.lastrowid
+            return cursor.fetchone()[0]
         else:
             cursor.execute(
-                "UPDATE tickets SET user_id = %s WHERE event_id = %s AND user_id IS NULL",
+                "UPDATE tickets SET user_id = %s WHERE event_id = %s AND user_id IS NULL RETURNING ticket_id",
                 [user_id, event_id]
             )
-            cursor.execute(
-                "SELECT ticket_id FROM tickets WHERE event_id = %s AND user_id = %s",
-                [event_id, user_id]
-            )
-            return cursor.fetchone()[0]
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                raise Exception("No ticket was updated")
 
 
 EXTERNAL_SITES = {
@@ -195,30 +165,84 @@ def process_order(request, event_id):
             return redirect('event', event_id=event_id)
 
 
-
 # === Много функций для генерирования QR кода на билетах ===
 
-# Генерация
-def generate_qr_code_from_sql(query_result, file_path):
-    qr = pyqrcode.create(query_result)
-    qr.png(file_path, scale=6)
-    return file_path
+# Функция генерации QR-кода
+def generate_qr_code(query_result, file_name="generated_qr.png"):
+    static_dir = os.path.join(settings.BASE_DIR, "static", "eventpage", "img")
+    os.makedirs(static_dir, exist_ok=True)
+    file_path = os.path.join(static_dir, file_name)
+
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=5)
+    qr.add_data(query_result)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="white", back_color="transparent")
+    img.save(file_path)
+
+    return f"/static/eventpage/img/{file_name}"
 
 
-def get_query_result(request):
-    user_id = request.session.get('user_id')
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """SELECT user_id, user_mail, event_name, ticket_id, price 
-            FROM Tickets 
-            JOIN Customers USING (user_id)
-            JOIN Events USING (event_id)
-            WHERE user_id = %s""",
-            [user_id]
-        )
-        query_result = cursor.fetchone()[0]
+# Функция получения данных для QR-кода
+def get_query_result(user_id, ticket_id):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """SELECT user_id, user_mail, event_name, ticket_id, price 
+                FROM Tickets 
+                JOIN Customers USING (user_id)
+                JOIN Events USING (event_id)
+                WHERE user_id = %s AND ticket_id = %s
+                LIMIT 1;""",
+                [user_id, ticket_id]
+            )
+            result = cursor.fetchone()
+            if not result:
+                raise Http404("Данные для QR-кода не найдены.")
 
-        qr_file_path = "/static/eventpage/img/generated_qr.png"
-        generate_qr_code_from_sql(query_result, qr_file_path)
+            # Форматируем данные для QR-кода
+            query_result = f"ID: {result[0]}, Email: {result[1]}, Event: {result[2]}, Ticket: {result[3]}, Price: {result[4]}"
+            return query_result
+    except Exception as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+        raise Http404("Произошла ошибка при получении данных для QR-кода.")
 
 
+# отображение билета со всеми данными
+def buy_ticket(request, ticket_id):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """SELECT ticket_id, address, event_name, event_date, time, category
+                    FROM Tickets 
+                    INNER JOIN Events ON Tickets.event_id = Events.event_id
+                    INNER JOIN Categories ON Events.category_id = Categories.category_id
+                    WHERE ticket_id = %s""",
+                    [ticket_id]
+            )
+            ticket = cursor.fetchone()
+
+            if not ticket:
+                print("Билет не найден в бд")
+                return redirect('mytickets')
+
+            event_data = {
+                'ticket_id': ticket[0],
+                'place': ticket[1],
+                'event_name': ticket[2],
+                'event_date': ticket[3],
+                'time': ticket[4],
+                'category': ticket[5]
+            }
+            user_id = request.session.get('user_id')
+            query_result = get_query_result(user_id, ticket[0])
+            qr_path = generate_qr_code(query_result)
+
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+        return redirect('mytickets')
+
+    return render(request, 'eventpage/buy.html', {'ticket': event_data, 'qr_path': qr_path})

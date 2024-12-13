@@ -259,6 +259,30 @@ h1, h2 {
 }
 
 .event-list {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(134, 141, 212, 0.9) transparent;
+}
+
+/* Для Chrome, Edge, Safari */
+.event-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.event-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.event-list::-webkit-scrollbar-thumb {
+    background-color: rgba(134, 141, 212, 0.9);
+    border-radius: 20px;
+    border: 2px solid transparent;
+}
+
+.event-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(134, 141, 212, 1);
+}
+
+.event-list {
     flex: 1;
     max-width: 40%;
     padding: 20px;

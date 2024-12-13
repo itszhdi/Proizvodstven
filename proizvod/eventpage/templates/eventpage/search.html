@@ -86,10 +86,14 @@
             <div class="content">
                 <div class="left">
                     <div class="image-frame">
-                        {% if event.current == "Astana" %}
+                        {% if "AITU" in event.place %}
                             <iframe src="https://yuujiso.github.io/aitumap/" width="600" height="400"></iframe>
+                        {% elif event.place == "Бейбарыс Султан 12а, креатив хаб OzgeEpic" %}
+                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=71.36079107233223%2C51.168607442631036%2C71.37266789385018%2C51.174278216107105&amp;layer=layer=mapnik&amp;marker=51.171071,71.366707" style="border: 2px solid white"></iframe>
+                        {% elif event.place == "West Hall" %}
+                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=71.34274709194534%2C51.14457796213681%2C71.34868550270431%2C51.14741491320643&amp;layer=layer=mapnik&amp;marker=51.14636,71.345489" style="border: 2px solid white"></iframe>
                         {% elif event.current == "Almaty" %}
-                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=76.89937227491365%2C43.21964169623557%2C76.91500418905245%2C43.22623230741559&amp;layer=hot" style="border: 2px solid white"></iframe>
+                            <iframe width="600" height="400" src="https://www.openstreetmap.org/export/embed.html?bbox=76.89937227491365%2C43.21964169623557%2C76.91500418905245%2C43.22623230741559&amp;layer=layer=mapnik&amp;marker=43.2209552,76.9051127" style="border: 2px solid white"></iframe>
                         {% endif %}
                     </div>
                 </div>
