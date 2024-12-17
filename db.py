@@ -114,33 +114,7 @@ try:
                   (7, 1000),
                   (8, 1500),
                   (9,600);
-                  
-                  
-            CREATE OR REPLACE FUNCTION timer(event int) 
-            RETURNS TEXT AS $$
-            DECLARE
-                base_date TIMESTAMP := 'CURRENT_TIMESTAMP;
-                events_date TIMESTAMP;
-                time_diff INTERVAL;
-            BEGIN
-                SELECT event_date 
-                INTO events_date
-                FROM Events
-                WHERE event_id = event;
-                
-                IF events_date IS NULL THEN
-                    RAISE EXCEPTION 'No event_date found in Events table';
-                END IF;
-                
-                time_diff := events_date - base_date;
-                RETURN 
-                    CONCAT(
-                        EXTRACT(DAY FROM time_diff), ' дней ',
-                        EXTRACT(HOUR FROM time_diff), ' часов ',
-                    );
-            END;
-            $$ LANGUAGE plpgsql;
-            
+                    
             
             CREATE VIEW event_info
                 AS
@@ -189,6 +163,24 @@ try:
                         );
                 END;
                 $$ LANGUAGE plpgsql;
+                
+                CREATE OR REPLACE FUNCTION decrease_people_amount()
+                RETURNS TRIGGER AS $$
+                BEGIN
+                    UPDATE Events
+                    SET people_amount = people_amount - 1
+                    WHERE event_id = NEW.event_id;
+                    IF (SELECT people_amount FROM Events WHERE event_id = NEW.event_id) < 0 THEN
+                        RAISE EXCEPTION 'No more seats available for event %', NEW.event_id;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+                
+                CREATE TRIGGER decrease_seats_trigger
+                AFTER INSERT OR UPDATE ON Tickets
+                FOR EACH ROW
+                EXECUTE FUNCTION decrease_people_amount();
             """)
             print("ok")
 except psycopg2.Error as e:
