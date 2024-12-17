@@ -58,7 +58,7 @@ h2 {
 .profile-section {
   text-align: center;
   position: absolute;
-  top: 66%;
+  top: 70%;
   left: 20%;
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@ h2 {
 .info-section {
  position: absolute;
  top: 16%;
- right: 10%;
+ right: 6%;
  margin-left: 10%;
 }
 
@@ -127,14 +127,12 @@ h2 {
 #add {
   background: #2F3469;
   opacity: 1;
-  padding: 23px;
   border: 1.5px solid white;
   margin-left: 10px;
 }
 
 #ticketslist {
   opacity: 1;
-  padding: 20px;
   border: 1.5px solid white;
   margin-left: 10px;
 
