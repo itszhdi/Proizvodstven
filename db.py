@@ -16,25 +16,14 @@ try:
                 user_password TEXT NOT NULL
             );
             
-             ALTER TABLE Customers
-             ADD COLUMN user_name TEXT DEFAULT 'User';
-             
-             ALTER TABLE Customers
-             ADD CONSTRAINT chk_email CHECK (user_mail ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+           
             
              CREATE TABLE IF NOT EXISTS Organizers (
                 organizer_id SERIAL PRIMARY KEY,
                 name VARCHAR(100)
             );
             
-            ALTER TABLE Organizers
-            ADD COLUMN user_id INT DEFAULT NULL;
-            
-            ALTER TABLE Organizers
-            ADD CONSTRAINT fk_user_id
-            FOREIGN KEY (user_id) REFERENCES Customers(user_id)
-            ON DELETE SET NULL
-            ON UPDATE CASCADE;
+          
 
             CREATE TABLE IF NOT EXISTS Categories (
                 category_id SERIAL PRIMARY KEY,
@@ -55,8 +44,7 @@ try:
                 poster TEXT
             );
             
-            ALTER TABLE Events
-            ADD COLUMN people_amount INT;
+         
             
             CREATE TABLE IF NOT EXISTS Tickets (
                 ticket_id SERIAL PRIMARY KEY,
@@ -65,18 +53,8 @@ try:
                 price INT NOT NULL
             );
             
-            ALTER TABLE Tickets
-            ADD CONSTRAINT chk_price CHECK (price >= 0);
-                        
-            ALTER TABLE Events
-            ADD CONSTRAINT unique_event_id UNIQUE (event_id);
-            
-            ALTER TABLE Tickets
-            ADD CONSTRAINT unique_ticket_id UNIQUE (ticket_id);
-            
-            CREATE INDEX find_category_name ON Categories (LOWER(category));
-            
-            CREATE INDEX find_organizer_name ON Organizers (LOWER(name));
+         
+    
             
             INSERT INTO Categories(category)
             VALUES ('ЧТО ГДЕ КОГДА'),
@@ -97,7 +75,7 @@ try:
                     ('Miss & Mister AITU', '03-05-2024', 'Already on May 3, we will find out who will receive the title of Miss&Mister AITU at an exciting gala concert, where you are expected: Raffle of the merch and unique prizes from sponsors! (For more information, follow our stories)', 5, 3, 'Astana', '16:00', 'Assembly Hall','2MAMA.png',150),
                     ('Финал осенней серии', '19-10-2024', 'After intense intellectual battles, the teams came to a decisive meeting, where every correct answer can be decisive!', 1, 1, 'Astana', '16:00', 'AITU - C1.1.334L','3WWW.png',24),
                     ('AITU Commencement Party', '11-08-2024', 'We are thrilled to invite you to AITU Commencement Party! It`s time to officially join our family and meet new friendse.', 4, 4, 'Astana', '16:00', 'West Hall','4ACP.png',1000),
-                    ('Club fair', '18-09-2024', 'AITU has a huge number of clubs. We know that freshmen can`t wait to learn more about each one and already start taking part in student life', 3, 3, 'Astana', '14:00', 'Assembly Hall','5CF.png'),
+                    ('Club fair', '18-09-2024', 'AITU has a huge number of clubs. We know that freshmen can`t wait to learn more about each one and already start taking part in student life', 3, 3, 'Astana', '14:00', 'Assembly Hall','5CF.png', none),
                     ('Отчетный концерт "Eurasia Band"', '22-11-2024', 'We invite Friends from AITU to attend the Eurasia Band reporting concert. Unforgettable impressions and a warm welcome await you!', 2,2, 'Astana', '17:00', 'КЦДС Атакент','6CEB.png',500),
                     ('Студенческий киновечер', '14-10-2024', 'We are going to watch the movie "Harry Potter and the Goblet of Fire". Don`t miss the chance to immerse yourself in the world of magic and spend time with friends! Come and get a charge of positive emotions!', 4,4, 'Astana', '18:00', 'Assembly Hall','7HPM.png',300),
                     ('Music Spooktacular', '31-10-2024', 'Through the fog of an October night, when the world of the living and the dead almost touch, we invite you to the “Music Spooktacular”', 2,2, 'Astana', '17:00', 'Assembly Hall','8MS.png',300),
