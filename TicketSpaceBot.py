@@ -3,10 +3,6 @@ import os
 import psycopg2
 from telebot import types
 
-api_token = '7711643797:AAE6h8lABFiCBjaHE8S2RYonT3pP2vyFZTo'
-SALES_CHAT_ID = 1293979420
-TECH_CHAT_ID = 979561775
-
 bot = telebot.TeleBot(api_token)
 
 # Храним данные о пользователях в словаре
