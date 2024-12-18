@@ -11,6 +11,11 @@ def get_city(request):
         request.session['selected_city'] = city  # Обновляем сессию
     return city
 
+def get_banners():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT poster FROM Events WHERE poster IS NOT NULL")
+        posters = cursor.fetchall()
+    return posters
 
 def show_main_page(request):
     city = get_city(request)
@@ -21,7 +26,8 @@ def show_main_page(request):
         LIMIT 8;
         ''')
         event_list = cursor.fetchall()
-    return render(request, 'mainpage/main_page.html', {'city': city, 'events' :event_list})
+        posters = get_banners()
+    return render(request, 'mainpage/main_page.html', {'city': city, 'events' :event_list, 'posters': posters})
 
 
 def event_detail(event_id):
