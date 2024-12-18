@@ -3,6 +3,8 @@ import os
 import psycopg2
 from telebot import types
 
+
+
 bot = telebot.TeleBot(api_token)
 
 # Храним данные о пользователях в словаре
@@ -42,49 +44,80 @@ def order_advert(call):
     user_data[call.from_user.id] = {'step': 'waiting_for_event_name'}
 
 
-@bot.message_handler(func=lambda message: message.chat.id in user_data and user_data[message.chat.id].get(
-    'step') == 'waiting_for_event_name')
+@bot.message_handler(func=lambda message: message.chat.id in user_data and user_data[message.chat.id].get('step') == 'waiting_for_event_name')
 def get_event_name(message):
     event_name = message.text
-    bot.send_message(message.chat.id,
-                     f"Название мероприятия '{event_name}' получено! Теперь отправьте постер в формате PNG/JPG")
+    try:
+        conn = psycopg2.connect(
+            dbname="project", user="postgres", password="1234567", host="localhost", port='5432')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT COUNT(*) FROM Events WHERE event_name = %s", (event_name,))
+        event_exists = cursor.fetchone()[0] > 0
+
+        cursor.close()
+        conn.close()
+
+        if event_exists:
+            bot.send_message(message.chat.id, f"Отправьте фото в формате PNG/JPG для мероприятия '{event_name}'.")
+            user_data[message.chat.id]['step'] = 'waiting_for_event_poster'
+        else:
+            bot.send_message(message.chat.id, "Мероприятие не найдено! Добавьте событие на сайт и попробуйте снова.")
+            return
+    except Exception as e:
+        bot.send_message(message.chat.id, "Произошла ошибка. Пожалуйста, попробуйте позже.")
+        print(f"Ошибка в базе данных: {e}")
 
     # Сохраняем название мероприятия в данных пользователя
     user_data[message.chat.id]['event_name'] = event_name
     user_data[message.chat.id]['step'] = 'waiting_for_poster'
 
+@bot.message_handler(func=lambda message: message.chat.id in user_data and user_data[message.chat.id].get('step') == 'waiting_for_poster')
+def handle_invalid_message(message):
+    event_name = user_data[message.chat.id].get('event_name')
+    bot.send_message(message.chat.id, f"Отправьте фото-баннер в формате PNG/JPG.")
 
-@bot.message_handler(content_types=['photo'],
+@bot.message_handler(content_types=['photo', 'document'],
                      func=lambda message: message.chat.id in user_data and user_data[message.chat.id].get('step') == 'waiting_for_poster')
 def handle_banner_upload(message):
-    event_name = user_data[message.chat.id].get('event_name')
-    event_name_c = event_name.replace(" ", "_").replace(":", "")
-    # Получаем информацию о фотографии
-    file_info = bot.get_file(message.photo[-1].file_id)  # Используем последнее фото, это самое большое качество
-
-    # Скачиваем файл
-    downloaded_file = bot.download_file(file_info.file_path)
-
-    # Указываем папку для сохранения
-    folder_path = 'proizvod/mainpage/static/mainpage/img/'
-    poster_path = f"{folder_path}{event_name_c}_poster.png"
-    path = f"/static/mainpage/img/{event_name_c}_poster.png"
-    with open(poster_path, 'wb') as new_file:
-        new_file.write(downloaded_file)
     try:
-        conn = psycopg2.connect(
-            dbname="project", user="postgres", password="1234567", host="localhost", port='5432')
-        cursor = conn.cursor()
-        cursor.execute("UPDATE Events SET poster = %s WHERE event_name = %s", (path, event_name))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        bot.send_message(message.chat.id, f"Постер для мероприятия '{event_name}' успешно загружен и сохранен!")
+        event_name = user_data[message.chat.id].get('event_name')
+        event_name_c = event_name.replace(" ", "_").replace(":", "")
+
+        if message.content_type == 'photo':
+            file_info = bot.get_file(message.photo[-1].file_id)
+        else:
+            bot.send_message(message.chat.id, "Отправьте фотографию, а не документ.")
+            return
+        downloaded_file = bot.download_file(file_info.file_path)
+
+        # Папка для сохранения
+        folder_path = 'proizvod/mainpage/static/mainpage/img/'
+        poster_path = f"{folder_path}{event_name_c}_poster.png"
+        path = f"/static/mainpage/img/{event_name_c}_poster.png"
+        with open(poster_path, 'wb') as new_file:
+            new_file.write(downloaded_file)
+        try:
+            conn = psycopg2.connect(
+                dbname="project", user="postgres", password="1234567", host="localhost", port='5432')
+            cursor = conn.cursor()
+            cursor.execute("UPDATE Events SET poster = %s WHERE event_name = %s", (path, event_name))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            bot.send_message(message.chat.id, f"Постер для мероприятия '{event_name}' успешно загружен и сохранен!")
+        except Exception as e:
+            bot.send_message(message.chat.id, "Ошибка при сохранении данных!")
+            print(f"Ошибка при сохранении в базе данных: {e}")
+        # Очищаем данные пользователя
+        del user_data[message.chat.id]
+    except AttributeError as e:
+        bot.send_message(message.chat.id, "Ошибка: возможно, вы отправили не фото.")
+        print(f"Ошибка: {e}")
+
     except Exception as e:
-        bot.send_message(message.chat.id, "Ошибка при сохранении данных!")
-        print(f"Ошибка при сохранении в базе данных: {e}")
-    # Очищаем данные пользователя
-    del user_data[message.chat.id]
+        bot.send_message(message.chat.id, "Произошла ошибка при обработке запроса.")
+        print(f"Общая ошибка: {e}")
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ['connect_tech', 'connect_marketing', 'connect_with'])
