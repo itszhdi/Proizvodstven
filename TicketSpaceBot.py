@@ -93,7 +93,7 @@ def handle_banner_upload(message):
 
 @bot.callback_query_handler(func=lambda call: call.data in ['connect_tech', 'connect_marketing', 'connect_with'])
 def handle_department_selection(call):
-    if call.data == 'connect_marketing' or 'connect_with':
+    if call.data in ['connect_marketing', 'connect_with']:
         bot.send_message(call.message.chat.id, "Введите текст сообщения для отдела маркетинга:")
         user_data[call.from_user.id] = {'step': 'waiting_for_marketing_message'}
     elif call.data == 'connect_tech':
